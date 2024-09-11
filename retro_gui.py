@@ -1,4 +1,5 @@
 
+import os
 import pygame
 from retro_button import RetroButton
 
@@ -13,6 +14,7 @@ class Colors:
 
 UI_FPS = 60
 WIN_BORDER_SIZE = 2
+WINDOW_FLAGS = pygame.NOFRAME | pygame.RESIZABLE
 
 __internal_clock = pygame.Clock()
 ui_tick = lambda: __internal_clock.tick(UI_FPS)
@@ -29,12 +31,13 @@ def __close_app (_):
     app_state.running = False
 
 def __maximize_app (btn):
-    pygame.display.set_mode((__info.current_w, __info.current_h), pygame.NOFRAME)
+    os.environ['SDL_VIDEO_CENTERED'] = "1"
+    pygame.display.set_mode((__info.current_w, __info.current_h), WINDOW_FLAGS)
 
 def get_window (w: int, h: int, caption: str):
     global __win_size
     __win_size = (w, h)
-    win = pygame.display.set_mode((w, h), pygame.NOFRAME)
+    win = pygame.display.set_mode((w, h), WINDOW_FLAGS)
     pygame.display.set_caption(caption)
 
     icon_size = 24
