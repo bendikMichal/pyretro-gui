@@ -6,7 +6,7 @@ Window = rg.get_window(640, 480, "Retro window")
 while rg.app_state.running:
     rg.ui_tick()
 
-    rg.window_update()
+    rg.window_update(Window)
 
     rg.window_render(Window)
 
