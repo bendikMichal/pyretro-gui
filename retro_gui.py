@@ -1,12 +1,18 @@
 
+
 import os, sys
 import pygame
 from pygame.version import vernum
 from retro_button import MoveButton, RetroButton
+from retro_screen import get_mouse_pos
 
 pygame.init()
 
 def init ():
+    print("Requirements: ")
+    print("Windows: pygame-ce >= 2.5.x")
+    print("Linux: pygame-ce >= 2.5.x, python-xlib")
+
     if vernum.major < 2:
         print("Required major version of pygame-ce is >= 2")
         os._exit(1)
@@ -39,7 +45,6 @@ if sys.platform == "win32":
     SW_NORMAL   = 1
     SW_MAXIMIZE = 3
     SW_MINIMIZE = 6
-
 
 __internal_clock = pygame.Clock()
 ui_tick = lambda: __internal_clock.tick(UI_FPS)
@@ -88,15 +93,18 @@ def __move_window (btn):
     move_check()
 
     x, y = pygame.display.get_window_position()
-    # print(pygame.display.get_desktop_sizes(), pygame.display.get_active())
-    # print(x, y)
-    mpos = pygame.mouse.get_pos()
-    dist_x = mpos[0] - btn.origin_press[0]
-    dist_y = mpos[1] - btn.origin_press[1]
-    x += dist_x
-    y += dist_y
+    # mpos = pygame.mouse.get_pos()
+    # dist_x = mpos[0] - btn.origin_press[0]
+    # dist_y = mpos[1] - btn.origin_press[1]
+
+    # x += dist_x
+    # y += dist_y
+    mx, my = get_mouse_pos()
+    x = mx - btn.origin_press[0]
+    y = my - btn.origin_press[1]
 
     pygame.display.set_window_position((x, y))
+
 
 def __windowize_app (btn):
     if sys.platform == "win32":
@@ -128,11 +136,15 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
     return win
 
 def window_update (window: pygame.Surface):
+    mouse_pos = None
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             app_state.running = False
 
-    mouse_pos = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEMOTION:
+            mouse_pos = event.pos
+
+    if not mouse_pos: mouse_pos = pygame.mouse.get_pos()
     mouse_btns = pygame.mouse.get_pressed()
 
     for w in app_state.widgets:
