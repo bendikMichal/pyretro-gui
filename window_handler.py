@@ -5,6 +5,7 @@ from retro_screen import get_mouse_pos
 
 pygame.init()
 
+BAR_SIZE        = 32
 WINDOW_FLAGS    = pygame.NOFRAME
 # WINDOW_FLAGS    = pygame.RESIZABLE
 
