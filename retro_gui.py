@@ -55,10 +55,12 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
 
     icon_size = RetroButton.ICON_SIZE
     pad = RetroButton.PAD
+    icon_pad = RetroButton.PAD // 2
+
     create_button("close", pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = __close_app)
-    create_button("maximize", icon_size + pad * 2, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app)
-    create_button("minimize", icon_size * 2 + pad * 3, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app)
-    create_move_button(icon_size * 3 + pad * 4, pad, w = w - (MoveButton.APPICON_SIZE + (icon_size + pad) * 4), h = 20, anchors = [1, 0], onpressed = wh._move_window)
+    create_button("maximize", icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app)
+    create_button("minimize", (icon_size + icon_pad) * 2 + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app)
+    create_move_button(icon_size * 3 + pad * 3, pad, w = w - (MoveButton.APPICON_SIZE + (icon_size + pad) * 4), h = 20, anchors = [1, 0], onpressed = wh._move_window)
     return win
 
 def window_update (window: pygame.Surface):
