@@ -1,7 +1,7 @@
 
 import retro_gui as rg
 
-Window = rg.get_window(640, 480, "Retro window")
+Window = rg.get_window(640, 480, "File Open")
 
 while rg.app_state.running:
     rg.ui_tick()

@@ -72,9 +72,8 @@ class RetroButton:
 
 class MoveButton(RetroButton):
     APPICON_SIZE = 48
-    font = pygame.font.SysFont("Courier New", 11)
-    font = pygame.font.SysFont("Arial", 11)
-    # font.set_bold(True)
+    font = pygame.font.SysFont("Courier New", 14)
+    font.set_bold(True)
 
     def __init__ (self, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [(0, 0, 0)] * 2, border_color: tuple = (0, 0, 0), shadow_color: tuple = (0, 0, 0), onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0]):
         self.x = x
@@ -131,7 +130,7 @@ class MoveButton(RetroButton):
         pygame.draw.rect(win, self.border_color, r, 1)
         pygame.draw.line(win, self.border_color, (r.x, r.y + r.h), (r.x + r.w - 1, r.y + r.h), 1)
 
-        text_surf = self.font.render(pygame.display.get_caption()[0], False, self.border_color)
+        text_surf = self.font.render(pygame.display.get_caption()[0], True, self.border_color)
         win.blit(text_surf, [r.x + 4, r.y + 1])
 
 
