@@ -3,7 +3,10 @@
 import os, sys
 import pygame
 from pygame.version import vernum
-from retro_button import MoveButton, RetroButton
+from menu_bar import MenuBar, MenuItem
+from retro_button import RetroButton
+from move_button import MoveButton
+from retro_icon import RetroIcon
 import window_handler as wh
 
 pygame.init()
@@ -51,7 +54,11 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
     wh._win_size = (w, h)
     win = pygame.display.set_mode((w, h), wh.WINDOW_FLAGS)
     pygame.display.set_caption(caption)
-    if icon: pygame.display.set_icon(pygame.image.load(icon).convert_alpha())
+
+    ico = None
+    if icon: 
+        ico = pygame.image.load(icon).convert_alpha()
+        pygame.display.set_icon(ico)
 
     icon_size = RetroButton.ICON_SIZE
     pad = RetroButton.PAD
@@ -60,7 +67,13 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
     create_button("close", pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = __close_app)
     create_button("maximize", icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app)
     create_button("minimize", (icon_size + icon_pad) * 2 + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app)
-    create_move_button(icon_size * 3 + pad * 3, pad, w = w - (MoveButton.APPICON_SIZE + (icon_size + pad) * 4), h = 20, anchors = [1, 0], onpressed = wh._move_window)
+    create_move_button(icon_size * 3 + pad * 3, pad, h = 20, anchors = [1, 0], onpressed = wh._move_window)
+    create_icon(pad, pad, icon = ico)
+
+    app_state.widgets.append(MenuBar([
+        MenuItem("File", 0, []),
+        MenuItem("Open", 0, [])
+        ]))
     return win
 
 def window_update (window: pygame.Surface):
@@ -109,3 +122,9 @@ def create_move_button (x: int, y: int, w: int = 32, h: int = 32, colors: list[t
     _btn = MoveButton(x, y, w, h, colors, border_color, shadow_color, onclick, onpressed, anchors)
     app_state.widgets.append(_btn)
     return _btn
+
+def create_icon (x: int, y: int, w: int = 24, h: int = 32, color: tuple = Colors.BG, border_color: tuple = Colors.TEXT, icon: pygame.Surface | None = None, anchors: list[int] = [0, 0]):
+    _btn = RetroIcon(x, y, w, h, color, border_color, icon, anchors)
+    app_state.widgets.append(_btn)
+    return _btn
+
