@@ -1,5 +1,5 @@
 
-import os
+import os, sys
 import pygame
 from pygame.version import vernum
 from retro_button import MoveButton, RetroButton
@@ -22,18 +22,23 @@ def move_check ():
         os._exit(1)
 
 class Colors:
-    BG = (179, 156, 174)
-    LIGHT_BG = (217, 186, 202)
-    TEXT = (15, 11, 12)
-    CLOSE = (232, 127, 141)
+    BG          = (179, 156, 174)
+    LIGHT_BG    = (217, 186, 202)
+    TEXT        = (15, 11, 12)
+    CLOSE       = (232, 127, 141)
     CLOSE_HOVER = (235, 153, 165)
-    SHADOW = (158, 133, 152)
+    SHADOW      = (158, 133, 152)
 
-UI_FPS = 60
+UI_FPS          = 60
 WIN_BORDER_SIZE = 2
-BAR_SIZE = 48
-WINDOW_FLAGS = pygame.NOFRAME | pygame.RESIZABLE
+BAR_SIZE        = 48
+WINDOW_FLAGS    = pygame.NOFRAME
 # WINDOW_FLAGS = pygame.RESIZABLE
+
+if sys.platform == "win32":
+    SW_NORMAL   = 1
+    SW_MAXIMIZE = 3
+    SW_MINIMIZE = 6
 
 
 __internal_clock = pygame.Clock()
@@ -50,9 +55,28 @@ def __close_app (_):
     app_state.running = False
 
 def __maximize_app (btn):
-    # os.environ['SDL_VIDEO_CENTERED'] = "1"
-    pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
-    pygame.display.set_window_position((0, 0))
+    if sys.platform == "win32":
+        move_check()
+        pygame.display.set_mode((1, 1), pygame.RESIZABLE)
+        hwnd = pygame.display.get_wm_info()["window"]
+
+        import ctypes
+        ctypes.windll.user32.ShowWindow(hwnd, SW_MAXIMIZE)
+        size = list(pygame.display.get_window_size()).copy()
+
+        titlebar_h = ctypes.windll.user32.GetSystemMetrics(4)
+        size[1] += titlebar_h
+
+        pygame.display.set_mode((1, 1), WINDOW_FLAGS)
+        pygame.display.set_mode(size, WINDOW_FLAGS)
+
+        x, y = pygame.display.get_window_position()
+        pygame.display.set_window_position((x, y - titlebar_h))
+
+    else:
+        pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
+        pygame.display.set_window_position((0, 0))
+
     btn.name = "windowize"
     btn.load_img()
     btn.onclick = __windowize_app
@@ -62,7 +86,10 @@ def __minimize_app (btn):
 
 def __move_window (btn):
     move_check()
+
     x, y = pygame.display.get_window_position()
+    # print(pygame.display.get_desktop_sizes(), pygame.display.get_active())
+    # print(x, y)
     mpos = pygame.mouse.get_pos()
     dist_x = mpos[0] - btn.origin_press[0]
     dist_y = mpos[1] - btn.origin_press[1]
@@ -72,6 +99,12 @@ def __move_window (btn):
     pygame.display.set_window_position((x, y))
 
 def __windowize_app (btn):
+    if sys.platform == "win32":
+        hwnd = pygame.display.get_wm_info()["window"]
+
+        import ctypes
+        ctypes.windll.user32.ShowWindow(hwnd, SW_NORMAL)
+
     os.environ['SDL_VIDEO_CENTERED'] = "1"
     pygame.display.set_mode(__win_size, WINDOW_FLAGS)
     btn.name = "maximize"
