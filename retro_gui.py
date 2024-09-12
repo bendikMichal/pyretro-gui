@@ -72,7 +72,8 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
 
     app_state.widgets.append(MenuBar([
         MenuItem("File", 0, []),
-        MenuItem("Open", 0, [])
+        MenuItem("Edit", 0, []),
+        MenuItem("View", 1, [])
         ]))
     return win
 
