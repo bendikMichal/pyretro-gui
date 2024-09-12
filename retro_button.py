@@ -3,7 +3,10 @@ import os
 import pygame
 
 class RetroButton:
+    ICON_SIZE = 24
+    PAD = 6
     ICON_PATH = os.path.abspath(".") + "/ui_icons"
+
     def __init__ (self, name: str, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [(0, 0, 0)] * 2, onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0]):
         self.name = name
         self.x = x
@@ -66,6 +69,8 @@ class RetroButton:
 
 
 class MoveButton(RetroButton):
+    APPICON_SIZE = 48
+
     def __init__ (self, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [(0, 0, 0)] * 2, border_color: tuple = (0, 0, 0), shadow_color: tuple = (0, 0, 0), onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0]):
         self.x = x
         self.y = y
@@ -107,6 +112,9 @@ class MoveButton(RetroButton):
         if not self.pressed and self.__prev_pressed and self.focused:
             if self.onclick:
                 self.onclick(self)
+
+        self.w = win_size[0] - (self.APPICON_SIZE + (self.ICON_SIZE + self.PAD) * 4)
+        self.rect.w = self.w
 
     def render (self, win, win_size):
         r = self.get_rect(win_size)
