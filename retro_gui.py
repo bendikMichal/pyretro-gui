@@ -14,6 +14,8 @@ from retro_icon import RetroIcon
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE
 from app_core import app_state
 
+import todo
+
 import window_handler as wh
 
 
@@ -35,7 +37,7 @@ init()
 __internal_clock = pygame.Clock()
 ui_tick = lambda: __internal_clock.tick(UI_FPS)
 
-def __close_app (_):
+def close_app (_):
     app_state.running = False
 
 
@@ -56,31 +58,11 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None):
     pad = RetroButton.PAD
     icon_pad = RetroButton.PAD // 2
 
-    create_button("close", pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = __close_app)
+    create_button("close", pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app)
     create_button("maximize", icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app)
     create_button("minimize", (icon_size + icon_pad) * 2 + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app)
     create_move_button(icon_size * 3 + pad * 3, pad, h = 20, anchors = [1, 0], onpressed = wh._move_window)
     create_icon(pad, pad, icon = ico)
-
-    app_state.widgets.append(MenuBar([
-        MenuItem("File", 0, DropDown([
-            MenuItem("Open", 0, DropDown([
-                MenuItem("image 1"), 
-                MenuItem("image 2"), 
-                MenuItem("Nested", dropdown = DropDown([
-                    MenuItem("Option 1"), 
-                    MenuItem("Option 2"),
-                    MenuItem("Nested deep", dropdown = DropDown([
-                        MenuItem("Option 3"), 
-                        MenuItem("Option 4")
-                    ], width = 100))
-                ]))
-            ])), 
-            MenuItem("Close", 0, shortcut = "Alt+F4", onclick = __close_app)
-        ]) ),
-        MenuItem("Edit", 0, None),
-        MenuItem("View", 1, None)
-        ]))
 
     app_state.Window = win
     app_state.screen = screen
