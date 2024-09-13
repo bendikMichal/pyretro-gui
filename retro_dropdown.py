@@ -9,7 +9,7 @@ class DropDown:
     X_OFF = 2
     DROPDOWN_PAD = 4
     TEXT_X_OFF = 16
-    TOGGLE_DELAY = UI_FPS / 2
+    TOGGLE_DELAY = UI_FPS / 10
 
     def __init__ (self, items: list = [], width: int = 150):
         self.items = items
@@ -26,13 +26,13 @@ class DropDown:
         self.opened = not self.opened
         self.toggle_timer = self.TOGGLE_DELAY
 
-    def update (self, mouse_pos, mouse_btns):
+    def update (self, mouse_pos, mouse_btns, trigger_focused = False):
         if self.toggle_timer > 0:
             self.toggle_timer -= 1 * app_state.get_dt()
 
         self.focused = self.rect and self.rect.collidepoint(mouse_pos)
 
-        if not self.focused and mouse_btns[0] and self.toggle_timer <= 0:
+        if not self.focused and mouse_btns[0] and self.toggle_timer <= 0 and not trigger_focused:
             self.opened = False
 
         for it in self.items:

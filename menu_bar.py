@@ -5,12 +5,16 @@ from retro_dropdown import DropDown
 
 from constants import Colors
 from retro_text import font, small_font
+from widget import Widget
 
-class MenuItem:
+
+class MenuItem (Widget):
     FONT_W = 6
     IT_PAD = 2
 
     def __init__(self, text: str, letter_index: int, dropdown: DropDown | None = None, color: tuple = Colors.TEXT, shortcut: str | None = None, shortcut_fn = lambda _: 0, onclick = None):
+        super().__init__()
+        
         self.text = text
         self.letter_index = letter_index
         self.shortcut = shortcut
@@ -23,23 +27,20 @@ class MenuItem:
 
         self.rect = pygame.Rect(0, 0, 1, 1)
 
-        self.focused = False
         self.opened = False
-        self.pressed = False
-        self.__prev_pressed = self.pressed
 
     def update (self, mouse_pos, mouse_btns):
-        self.focused = self.rect.collidepoint(mouse_pos)
-        self.__prev_pressed = self.pressed
-        self.pressed = self.focused and mouse_btns[0]
+        super().update(mouse_pos, mouse_btns)
         self.opened = self.focused and mouse_btns[0] and self.dropdown
 
+        # toggle dropdown
         if self.dropdown: 
-            if mouse_btns[0] and self.focused: self.dropdown.toggle()
-            self.dropdown.update(mouse_pos, mouse_btns)
+            if self.clicked:
+                self.dropdown.toggle()
+            self.dropdown.update(mouse_pos, mouse_btns, trigger_focused = self.focused)
 
         # clicked
-        if not self.pressed and self.__prev_pressed and self.focused:
+        if self.clicked:
             if self.onclick:
                 self.onclick(self)
 
@@ -87,7 +88,7 @@ class MenuItem:
 
         # draw dropdown
         if self.dropdown:
-            if self.opened or self.dropdown.opened:
+            if self.dropdown.opened:
                 self.dropdown.render(win, self.rect)
 
         # update offset
