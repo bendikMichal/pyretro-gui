@@ -1,5 +1,6 @@
 
 import os, sys
+from re import S
 import pygame
 
 pygame.init()
@@ -10,7 +11,7 @@ from retro_button import RetroButton
 from move_button import MoveButton
 from retro_dropdown import DropDown
 from retro_icon import RetroIcon
-from constants import Colors, UI_FPS, WIN_BORDER_SIZE
+from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE
 from app_core import app_state
 
 import window_handler as wh
@@ -38,7 +39,7 @@ def __close_app (_):
     app_state.running = False
 
 
-def get_window (w: int, h: int, caption: str, icon: str | None = None):
+def create_window (w: int, h: int, caption: str, icon: str | None = None):
     wh._win_size = (w, h)
     win = pygame.display.set_mode((w, h), wh.WINDOW_FLAGS)
     pygame.display.set_caption(caption)
@@ -48,6 +49,9 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
         ico = pygame.image.load(icon).convert_alpha()
         pygame.display.set_icon(ico)
 
+    screen = pygame.Surface((w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER))
+    
+    # generating ui
     icon_size = RetroButton.ICON_SIZE
     pad = RetroButton.PAD
     icon_pad = RetroButton.PAD // 2
@@ -64,9 +68,15 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
         MenuItem("View", 1, None)
         ]))
 
-    return win
+    app_state.Window = win
+    app_state.screen = screen
+    return screen
 
-def window_update (window: pygame.Surface):
+
+def window_update ():
+    window = app_state.Window
+    ui_tick()
+
     mouse_pos = None
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -83,14 +93,28 @@ def window_update (window: pygame.Surface):
     for w in app_state.widgets:
         w.update(mouse_pos, mouse_btns, window.get_size())
 
-def window_render (window: pygame.Surface):
+
+def window_render ():
+    window = app_state.Window
+
+    # clear window
     win_size = window.get_size()
     window.fill(Colors.BG) 
+
+    # draw screen
+    if app_state.screen:
+        s = app_state.screen.get_size()
+        pygame.draw.rect(window, Colors.TEXT, (SCREEN_X_POS - SCR_BORDER, SCREEN_Y_POS - SCR_BORDER, s[0] + SCR_BORDER * 2, s[1] + SCR_BORDER * 2), SCR_BORDER)
+        app_state.screen.fill([255] * 3)
+        window.blit(app_state.screen, (SCREEN_X_POS, SCREEN_Y_POS))
     
+    # draw widgets
     for w in app_state.widgets:
         w.render(window, window.get_size())
 
+    # draw window border
     pygame.draw.rect(window, Colors.TEXT, (-1, -1, win_size[0] + 1, win_size[1] + 1), WIN_BORDER_SIZE)
+    
     pygame.display.update()
 
 

@@ -10,3 +10,9 @@ class Colors:
 
 UI_FPS          = 60
 WIN_BORDER_SIZE = 2
+
+SCR_BORDER      = 1
+# actual values are SCR_BORDER smaller, cuz of the border
+SCREEN_PAD      = 5
+SCREEN_X_POS    = SCREEN_PAD
+SCREEN_Y_POS    = 53

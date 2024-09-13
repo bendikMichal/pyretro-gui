@@ -1,4 +1,6 @@
 
+import pygame
+
 from constants import UI_FPS
 
 import time
@@ -7,6 +9,10 @@ class app_state:
     widgets = []
     _dt = 1
     lt = time.time()
+    
+    Window: pygame.Surface = None
+    screen: pygame.Surface | None = None
+
 
     @staticmethod
     def update_dt ():
