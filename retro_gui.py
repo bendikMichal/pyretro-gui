@@ -1,15 +1,20 @@
 
-
 import os, sys
 import pygame
+
+pygame.init()
+
 from pygame.version import vernum
 from menu_bar import MenuBar, MenuItem
 from retro_button import RetroButton
 from move_button import MoveButton
+from retro_dropdown import DropDown
 from retro_icon import RetroIcon
+from constants import Colors, UI_FPS, WIN_BORDER_SIZE
+from app_core import app_state
+
 import window_handler as wh
 
-pygame.init()
 
 def init ():
     print("Requirements: ")
@@ -26,25 +31,8 @@ def init ():
 init()
 
 
-class Colors:
-    BG          = (179, 156, 174)
-    LIGHT_BG    = (217, 186, 202)
-    TEXT        = (15, 11, 12)
-    CLOSE       = (232, 127, 141)
-    CLOSE_HOVER = (235, 153, 165)
-    SHADOW      = (158, 133, 152)
-
-UI_FPS          = 60
-WIN_BORDER_SIZE = 2
-
-
 __internal_clock = pygame.Clock()
 ui_tick = lambda: __internal_clock.tick(UI_FPS)
-
-
-class app_state:
-    running = True
-    widgets = []
 
 def __close_app (_):
     app_state.running = False
@@ -71,10 +59,10 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
     create_icon(pad, pad, icon = ico)
 
     app_state.widgets.append(MenuBar([
-        MenuItem("File", 0, []),
-        MenuItem("Edit", 0, []),
-        MenuItem("View", 1, [])
-        ], color = Colors.TEXT, focus_bg_color = Colors.LIGHT_BG ))
+        MenuItem("File", 0, DropDown([MenuItem("Open", 0), MenuItem("Close", 0, shortcut = "Alt+F4", onclick = __close_app)]) ),
+        MenuItem("Edit", 0, None),
+        MenuItem("View", 1, None)
+        ]))
 
     return win
 
@@ -87,6 +75,8 @@ def window_update (window: pygame.Surface):
         if event.type == pygame.MOUSEMOTION:
             mouse_pos = event.pos
 
+    app_state.update_dt()
+    
     if not mouse_pos: mouse_pos = pygame.mouse.get_pos()
     mouse_btns = pygame.mouse.get_pressed()
 
