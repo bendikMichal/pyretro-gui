@@ -11,7 +11,7 @@ class app_state:
     lt = time.time()
     
     Window: pygame.Surface = None
-    screen: pygame.Surface | None = None
+    screen: pygame.Surface = None
 
 
     @staticmethod

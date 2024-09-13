@@ -18,6 +18,7 @@ class DropDown:
         self.rect = None
         self.focused = False
         self.opened = False
+        self.child_focus = False
 
         self.toggle_timer = 0
     
@@ -26,17 +27,22 @@ class DropDown:
         self.opened = not self.opened
         self.toggle_timer = self.TOGGLE_DELAY
 
+    def get_hitbox_rect (self):
+        if not self.rect: return None
+        pad = 2
+        return pygame.Rect(self.rect.x - pad, self.rect.y, self.rect.w + pad, self.rect.h)
+
     def update (self, mouse_pos, mouse_btns, trigger_focused = False):
         if self.toggle_timer > 0:
             self.toggle_timer -= 1 * app_state.get_dt()
 
-        self.focused = self.rect and self.rect.collidepoint(mouse_pos)
+        self.focused = self.rect and self.get_hitbox_rect().collidepoint(mouse_pos)
 
         if not self.focused and mouse_btns[0] and self.toggle_timer <= 0 and not trigger_focused:
             self.opened = False
 
         for it in self.items:
-            it.update(mouse_pos, mouse_btns)
+            it.update(mouse_pos, mouse_btns, in_dropdown = True, parent_self = self)
 
     def render (self, win, rect):
         y_offset = rect.h + self.DROPDOWN_PAD
@@ -50,7 +56,7 @@ class DropDown:
         # draw dropdown items
         for it in self.items:
             r = pygame.Rect(rect.x, rect.y + y_offset, self.width - 4, 0)
-            y_offset += it.render(win, [rect.x + self.TEXT_X_OFF, rect.y + y_offset], custom_rect = r)[1] + self.DROPDOWN_PAD
+            y_offset += it.render(win, [rect.x + self.TEXT_X_OFF, rect.y + y_offset], custom_rect = r, in_dropdown = True)[1] + self.DROPDOWN_PAD
 
         # dropdown border
         # self.rect.h = y_offset - self.DROPDOWN_PAD * 3

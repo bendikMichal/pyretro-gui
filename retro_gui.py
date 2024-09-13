@@ -63,7 +63,21 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None):
     create_icon(pad, pad, icon = ico)
 
     app_state.widgets.append(MenuBar([
-        MenuItem("File", 0, DropDown([MenuItem("Open", 0), MenuItem("Close", 0, shortcut = "Alt+F4", onclick = __close_app)]) ),
+        MenuItem("File", 0, DropDown([
+            MenuItem("Open", 0, DropDown([
+                MenuItem("image 1"), 
+                MenuItem("image 2"), 
+                MenuItem("Nested", dropdown = DropDown([
+                    MenuItem("Option 1"), 
+                    MenuItem("Option 2"),
+                    MenuItem("Nested deep", dropdown = DropDown([
+                        MenuItem("Option 3"), 
+                        MenuItem("Option 4")
+                    ], width = 100))
+                ]))
+            ])), 
+            MenuItem("Close", 0, shortcut = "Alt+F4", onclick = __close_app)
+        ]) ),
         MenuItem("Edit", 0, None),
         MenuItem("View", 1, None)
         ]))

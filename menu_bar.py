@@ -12,7 +12,7 @@ class MenuItem (Widget):
     FONT_W = 6
     IT_PAD = 2
 
-    def __init__(self, text: str, letter_index: int, dropdown: DropDown | None = None, color: tuple = Colors.TEXT, shortcut: str | None = None, shortcut_fn = lambda _: 0, onclick = None):
+    def __init__(self, text: str, letter_index: int | None = None, dropdown: DropDown | None = None, color: tuple = Colors.TEXT, shortcut: str | None = None, shortcut_fn = lambda _: 0, onclick = None):
         super().__init__()
         
         self.text = text
@@ -29,15 +29,26 @@ class MenuItem (Widget):
 
         self.opened = False
 
-    def update (self, mouse_pos, mouse_btns):
+    def update (self, mouse_pos, mouse_btns, in_dropdown = False, parent_self = None):
         super().update(mouse_pos, mouse_btns)
         self.opened = self.focused and mouse_btns[0] and self.dropdown
+        if parent_self: parent_self.child_focus = self.dropdown and (self.dropdown.focused or self.dropdown.child_focus)
 
         # toggle dropdown
         if self.dropdown: 
             if self.clicked:
                 self.dropdown.toggle()
+
             self.dropdown.update(mouse_pos, mouse_btns, trigger_focused = self.focused)
+
+            if in_dropdown:
+                if self.focused:
+                    self.dropdown.opened = True
+                    self.dropdown.focused = True
+
+                elif not self.dropdown.focused and self.dropdown.opened and not self.dropdown.child_focus:
+                    self.dropdown.opened = False
+
 
         # clicked
         if self.clicked:
@@ -46,7 +57,7 @@ class MenuItem (Widget):
 
         self.shortcut_fn(self)
         
-    def render (self, win, pos, custom_rect = None):
+    def render (self, win, pos, custom_rect = None, in_dropdown = False):
         """
         custom_rect.h will be calculated based on the rendering if it == 0
         """
@@ -59,6 +70,7 @@ class MenuItem (Widget):
         pos[1] = pos[1] - int(not not self.opened)
         if custom_rect is not None and custom_rect.h == 0: custom_rect.h = txt.get_height()
 
+        # highlight
         if self.focused:
             if custom_rect is not None:
                 pygame.draw.rect(win, Colors.LIGHT_BG, custom_rect)
@@ -71,8 +83,14 @@ class MenuItem (Widget):
                     txt.get_size()[1] + self.IT_PAD
                 ], 1)
 
+        # arrow
+        if self.dropdown and in_dropdown and custom_rect:
+            arrow_txt = font.render(">", False, Colors.TEXT)
+            sp = (custom_rect.x + custom_rect.w - arrow_txt.get_width() - self.IT_PAD, pos[1] + 2)
+            win.blit(arrow_txt, sp)
+
         # render item
-        pygame.draw.line(txt, self.color, (self.FONT_W * self.letter_index, th), (self.FONT_W * (self.letter_index + 1), th), 1)
+        if self.letter_index is not None: pygame.draw.line(txt, self.color, (self.FONT_W * self.letter_index, th), (self.FONT_W * (self.letter_index + 1), th), 1)
         win.blit(txt, pos)
         if shortcut_txt and custom_rect: 
             sp = (custom_rect.x + custom_rect.w - shortcut_txt.get_width() - self.IT_PAD, pos[1] + 2)
@@ -89,7 +107,13 @@ class MenuItem (Widget):
         # draw dropdown
         if self.dropdown:
             if self.dropdown.opened:
-                self.dropdown.render(win, self.rect)
+                r = self.rect.copy()
+                if in_dropdown:
+                    r.x = r.x + r.w + 4
+                    # r.x = r.x + r.w
+                    r.y = r.y - r.h - DropDown.DROPDOWN_PAD
+
+                self.dropdown.render(win, r)
 
         # update offset
         return txt.get_size()
