@@ -17,6 +17,11 @@ class MenuItem (Widget):
         
         self.text = text
         self.letter_index = letter_index
+        self.shortcut_letter = None
+
+        if self.letter_index is not None:
+            self.shortcut_letter = self.text[self.letter_index].lower()
+
         self.shortcut = shortcut
         self.shortcut_fn = shortcut_fn
         self.onclick = onclick
@@ -32,6 +37,15 @@ class MenuItem (Widget):
     def update (self, mouse_pos, mouse_btns, in_dropdown = False, parent_self = None):
         super().update(mouse_pos, mouse_btns)
         self.opened = self.focused and mouse_btns[0] and self.dropdown
+        
+        if self.letter_index is not None and self.shortcut_letter is not None:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LALT] and keys[ord(self.shortcut_letter)]:
+                self.clicked = True
+                self.focused = True
+                if self.dropdown: self.dropdown.slow_toggle()
+
+        # check if nested menu is opened
         if parent_self: parent_self.child_focus = self.dropdown and (self.dropdown.focused or self.dropdown.child_focus)
 
         # toggle dropdown

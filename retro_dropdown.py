@@ -6,10 +6,11 @@ from constants import Colors, UI_FPS
 from retro_text import font
 
 class DropDown:
-    X_OFF = 2
-    DROPDOWN_PAD = 4
-    TEXT_X_OFF = 16
-    TOGGLE_DELAY = UI_FPS / 10
+    X_OFF               = 2
+    DROPDOWN_PAD        = 4
+    TEXT_X_OFF          = 16
+    TOGGLE_DELAY        = UI_FPS / 10
+    TOGGLE_DELAY_LONG   = UI_FPS / 5
 
     def __init__ (self, items: list = [], width: int = 150):
         self.items = items
@@ -26,6 +27,11 @@ class DropDown:
         if (self.toggle_timer > 0): return
         self.opened = not self.opened
         self.toggle_timer = self.TOGGLE_DELAY
+
+    def slow_toggle (self):
+        if (self.toggle_timer > 0): return
+        self.opened = not self.opened
+        self.toggle_timer = self.TOGGLE_DELAY_LONG
 
     def get_hitbox_rect (self):
         if not self.rect: return None
