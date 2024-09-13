@@ -74,7 +74,8 @@ def get_window (w: int, h: int, caption: str, icon: str | None = None):
         MenuItem("File", 0, []),
         MenuItem("Edit", 0, []),
         MenuItem("View", 1, [])
-        ]))
+        ], color = Colors.TEXT, focus_bg_color = Colors.LIGHT_BG ))
+
     return win
 
 def window_update (window: pygame.Surface):
