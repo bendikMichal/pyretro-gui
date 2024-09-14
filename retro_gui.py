@@ -3,6 +3,7 @@ import os, sys
 from re import S
 import pygame
 
+
 pygame.init()
 
 from pygame.version import vernum
@@ -11,6 +12,8 @@ from retro_button import RetroButton
 from move_button import MoveButton
 from retro_dropdown import DropDown
 from retro_icon import RetroIcon
+from scrollbar import ScrollBar
+
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE
 from app_core import app_state
 
@@ -63,6 +66,7 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None):
     create_button("minimize", (icon_size + icon_pad) * 2 + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app)
     create_move_button(icon_size * 3 + pad * 3, pad, h = 20, anchors = [1, 0], onpressed = wh._move_window)
     create_icon(pad, pad, icon = ico)
+
 
     app_state.Window = win
     app_state.screen = screen
