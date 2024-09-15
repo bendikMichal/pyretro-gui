@@ -9,7 +9,8 @@ class ScrollBar:
     SCRLBAR_WIDTH = 16
     ICON_PATH = RetroButton.ICON_PATH
 
-    def __init__ (self, x: int, y: int, size: int, content_size: int, horizontal: bool = False, row_size: int = 16):
+    def __init__ (self, x: int, y: int, size: int, content_size: int, horizontal: bool = False, row_size: int = 16, z_index: int = 0):
+        self.z_index = z_index
         self.x = x
         self.y = y
 

@@ -7,7 +7,7 @@ class RetroButton:
     PAD = 6
     ICON_PATH = os.path.abspath(".") + "/ui_icons"
 
-    def __init__ (self, name: str, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [(0, 0, 0)] * 2, onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0]):
+    def __init__ (self, name: str, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [(0, 0, 0)] * 2, onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0], z_index: int = 0):
         self.name = name
         self.x = x
         self.y = y
@@ -16,6 +16,7 @@ class RetroButton:
         self.rect = pygame.Rect(x, y, w, h)
         self.colors = colors
         
+        self.z_index = z_index
         self.onclick = onclick
         self.onpressed = onpressed
         self.anchors = anchors

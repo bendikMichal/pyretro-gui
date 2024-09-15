@@ -5,13 +5,14 @@ from retro_button import RetroButton
 
 class RetroIcon(RetroButton):
 
-    def __init__(self, x: int, y: int, w: int = 24, h: int = 32, color: tuple = ..., border_color: tuple = ..., icon: pygame.Surface | None = None, anchors: list[int] = [0, 0]):
+    def __init__(self, x: int, y: int, w: int = 24, h: int = 32, color: tuple = ..., border_color: tuple = ..., icon: pygame.Surface | None = None, anchors: list[int] = [0, 0], z_index: int = 0):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
         self.rect = pygame.Rect(x, y, w, h)
         self.anchors = anchors
+        self.z_index = z_index
 
         self.color = color
         self.border_color = border_color

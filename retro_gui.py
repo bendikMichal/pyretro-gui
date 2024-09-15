@@ -90,6 +90,7 @@ def window_update ():
     if not mouse_pos: mouse_pos = pygame.mouse.get_pos()
     mouse_btns = pygame.mouse.get_pressed()
 
+    app_state.widgets.sort(key = lambda i: i.z_index)
     for w in app_state.widgets:
         w.update(mouse_pos, mouse_btns, window.get_size())
 

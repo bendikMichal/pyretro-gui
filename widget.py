@@ -1,12 +1,14 @@
 
 class Widget:
-    def __init__ (self):
+    def __init__ (self, z_index: int = 0):
         self.rect = None
 
         self.focused = False
         self.pressed = False
         self.__prev_pressed = self.pressed
         self.clicked = False
+
+        self.z_index = z_index
 
     def update (self, mouse_pos, mouse_btns):
         if self.rect: self.focused = self.rect.collidepoint(mouse_pos)

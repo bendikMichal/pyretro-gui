@@ -9,7 +9,7 @@ pygame.font.init()
 class MoveButton(RetroButton):
     APPICON_SIZE = 24
 
-    def __init__ (self, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [(0, 0, 0)] * 2, border_color: tuple = (0, 0, 0), shadow_color: tuple = (0, 0, 0), onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0]):
+    def __init__ (self, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [(0, 0, 0)] * 2, border_color: tuple = (0, 0, 0), shadow_color: tuple = (0, 0, 0), onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0], z_index: int = 0):
         self.x = x
         self.y = y
         self.w = w
@@ -18,6 +18,7 @@ class MoveButton(RetroButton):
         self.colors = colors
         self.border_color = border_color
         self.shadow_color = shadow_color
+        self.z_index = z_index
         
         self.onclick = onclick
         self.onpressed = onpressed

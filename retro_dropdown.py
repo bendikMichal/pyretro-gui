@@ -12,9 +12,10 @@ class DropDown:
     TOGGLE_DELAY        = UI_FPS / 10
     TOGGLE_DELAY_LONG   = UI_FPS / 5
 
-    def __init__ (self, items: list = [], width: int = 150):
+    def __init__ (self, items: list = [], width: int = 150, z_index: int = 0):
         self.items = items
 
+        self.z_index = z_index
         self.width = width
         self.rect = None
         self.focused = False

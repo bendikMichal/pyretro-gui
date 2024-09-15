@@ -12,9 +12,10 @@ class MenuItem (Widget):
     FONT_W = 6
     IT_PAD = 2
 
-    def __init__(self, text: str, letter_index: int | None = None, dropdown: DropDown | None = None, color: tuple = Colors.TEXT, shortcut: str | None = None, shortcut_fn = lambda _: 0, onclick = None):
+    def __init__(self, text: str, letter_index: int | None = None, dropdown: DropDown | None = None, color: tuple = Colors.TEXT, shortcut: str | None = None, shortcut_fn = lambda _: 0, onclick = None, z_index: int = 0):
         super().__init__()
         
+        self.z_index = z_index
         self.text = text
         self.letter_index = letter_index
         self.shortcut_letter = None
@@ -139,8 +140,9 @@ class MenuBar:
     MENU_Y = 32
 
     # def __init__ (self, items: dict, color: tuple = (0, 0, 0)):
-    def __init__ (self, items: list[MenuItem]):
+    def __init__ (self, items: list[MenuItem], z_index: int = 0):
         # self.items = [MenuItem(key, items[key]["letter_index"], items[key]["dropdown_data"]) for key in items]
+        self.z_index = z_index
         self.items = items
 
 
