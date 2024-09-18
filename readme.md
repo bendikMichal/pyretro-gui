@@ -8,6 +8,7 @@ Written in python provides easy and quick learning curve.
 - [Dependencies](#Dependencies)
 - [Installation](#Installation)
 - [Docs](docs/docs.md)
+- [OS Support](#Support)
 
 ## Dependencies
 1. `python3`
