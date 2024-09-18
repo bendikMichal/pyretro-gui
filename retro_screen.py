@@ -11,7 +11,7 @@ if sys.platform == "win32":
         ctypes.windll.user32.GetCursorPos(ctypes.byref(p))
         return (int(p.x), int(p.y))
 else:
-    from Xlib import display
+    from Xlib import X, display
 
     ds = display.Display()
     root = ds.screen().root
@@ -19,3 +19,10 @@ else:
     def get_mouse_pos ():
         p = root.query_pointer()
         return (p.root_x, p.root_y)
+
+    def x_lib_get_workarea ():
+        workarea = root.get_full_property(ds.intern_atom('_NET_WORKAREA'), X.AnyPropertyType)
+        print(workarea.value)
+        return workarea.value
+
+    x_lib_get_workarea()

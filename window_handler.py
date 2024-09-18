@@ -3,7 +3,7 @@ import sys, os
 import pygame
 from app_core import app_state
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS
-from retro_screen import get_mouse_pos
+from retro_screen import get_mouse_pos, x_lib_get_workarea
 
 pygame.init()
 
@@ -44,8 +44,10 @@ def _maximize_app (btn):
         pygame.display.set_window_position((x, y - titlebar_h))
 
     else:
-        pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
-        pygame.display.set_window_position((0, 0))
+        wa = x_lib_get_workarea()
+        # pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
+        pygame.display.set_mode((wa[2], wa[3]), WINDOW_FLAGS)
+        pygame.display.set_window_position((wa[0], wa[1]))
 
     w, h = app_state.Window.get_size()
     new_size = (w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER)
