@@ -2,11 +2,11 @@
 
 ## Table of contents
 1. [Importing](#Importing)
-2. [Creating a window](#Creatingawindow)
-3. [Setting UI refresh rate](#SettingUIrefreshrate)
-4. [Main app loop](#Mainapploop)
-5. [Creating Menu Bar](#CreatingMenuBar)
-6. [Menu Item](#MenuItem)
+2. [Creating a window](#Creating-a-window)
+3. [Setting UI refresh rate](#Setting-UI-refresh-rate)
+4. [Main app loop](#Main-app-loop)
+5. [Creating Menu Bar](#Creating-Menu-Bar)
+6. [Menu Item](#Menu-Item)
 7. [About widgets](#Widgets)
 8. [Screen](#Screen)
 
@@ -36,7 +36,7 @@ while rg.app_state.running:
 ```
 
 ### Creating Menu Bar
-- `MenuBar` takes a list of [Menu Items](#MenuItem) as an argument
+- `MenuBar` takes a list of [Menu Items](#Menu-Item) as an argument
 ```python
 rg.app_state.widgets.append(rg.MenuBar([]))
 ```
