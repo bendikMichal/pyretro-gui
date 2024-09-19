@@ -106,6 +106,7 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 > It is used in some parts of docs for now, since PyRetro-Gui is in very early stages of development.
 
 ### Screen
+- Returned by [rg.create_window](#Creating-a-window)
 - It is a pygame surface that gets drawn at a certain position each render, can be used to render custom ui or other things
 > [!WARNING]
 > This part of the framework is untested and will most likely be replaced by a widget in future.
