@@ -37,7 +37,7 @@ Written in python provides easy and quick learning curve.
 |Windows|Linux|MAC OS|
 |-------|-----|------|
 |100%   |Mostly supported|Not tested|
+-------------------------------------
 
-<hr></hr>
 ## Credit
 Inspired by https://www.astralgrave.com/ 's visual style
