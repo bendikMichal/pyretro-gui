@@ -1,6 +1,6 @@
 <div align="center">
   <h1>PyRetro-Gui</h1>
-  <img src="example.png" />
+  <img src="example2.png" />
 </div>
 A cross platform framework for making retro styled apps(even games) that look the same everywhere.
 Written in python provides easy and quick learning curve.
