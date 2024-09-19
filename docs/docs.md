@@ -7,8 +7,10 @@
 4. [Main app loop](#Main-app-loop)
 5. [Creating Menu Bar](#Creating-Menu-Bar)
 6. [Menu Item](#Menu-Item)
-7. [About widgets](#Widgets)
-8. [Screen](#Screen)
+7. [DropDown](#DropDown)
+8. [Scrollbar](#Scrollbar)
+9. [About widgets](#Widgets)
+10. [Screen](#Screen)
 
 
 ### Importing
@@ -42,7 +44,55 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 ```
 
 ### Menu Item
+- `params` :
+  ```python
+  text: str
+  letter_index: int | None = None
+  dropdown: DropDown | None = None
+  color: tuple = Colors.TEXT
+  shortcut: str | None = None
+  shortcut_fn = lambda _: 0
+  onclick = None
+  z_index: int = 0
+  ```
+> [!NOTE]
+> The `shortcut_fn` gets called on every update, it is upto you to check whether the shortcut have been pressed
 
+- **Examples**
+    - Most basic menu item, only has a name, does nothing
+  ```python
+    rg.MenuItem("File")
+  ```
+    - Menu item with letter_index, onclick function gets called by pressing `Alt + rg.MenuItem.text[letter_index]`
+  ```python
+    rg.MenuItem("File", 0)
+  ```
+    - Basic menu item with onclick function
+  ```python
+    rg.MenuItem("File", onclick = handle_click)
+  ```
+    - Menu item with shortcut label
+  ```python
+    rg.MenuItem("File", shortcut = "Alt+F4")
+  ```
+    - Advanced menu item that works as a dropdown button, [DropDown params](#DropDown)
+  ```python
+    rg.MenuItem("File", dropdown = rg.DropDown([]))
+  ```
+
+### DropDown
+- `params` :
+  ```python
+  items: list[MenuItem]
+  width: int = 150
+  z_index: int = 0
+  ```
+
+
+### Scrollbar
+> [!WARNING]
+> Scrollbar is not meant to be used as a standalone widget, doing so will result in a crash of application
+> The intended use for it is inside a Container widget (not made as of yet)
 
 
 ### Widgets
@@ -55,6 +105,6 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 ### Screen
 - It is a pygame surface that gets drawn at a certain position each render, can be used to render custom ui or other things
 > [!WARNING]
-> This part of the framework is untested and might be replaced by a widget in future.
+> This part of the framework is untested and will most likely be replaced by a widget in future.
 
 
