@@ -23,6 +23,16 @@ import window_handler as wh
 
 
 def init ():
+    print(
+        """
+    |> Docs:
+    |>     https://github.com/bendikMichal/pyretro-gui/blob/master/docs/docs.md
+    |>
+    |>
+        """
+        )
+
+
     print("Requirements: ")
     print("Windows: pygame-ce >= 2.5.x")
     print("Linux: pygame-ce >= 2.5.x, python-xlib")

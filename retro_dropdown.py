@@ -1,8 +1,9 @@
 
 import pygame
 
-from app_core import app_state
 from constants import Colors, UI_FPS
+from app_core import app_state
+
 from retro_text import font
 
 class DropDown:
@@ -12,10 +13,13 @@ class DropDown:
     TOGGLE_DELAY        = UI_FPS / 10
     TOGGLE_DELAY_LONG   = UI_FPS / 5
 
-    def __init__ (self, items: list = [], width: int = 150, z_index: int = 0):
+    def __init__ (self, items: list, width: int = 150):
+        """
+        items: list[MenuItem]
+        width: int = 150
+        """
         self.items = items
 
-        self.z_index = z_index
         self.width = width
         self.rect = None
         self.focused = False
