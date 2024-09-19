@@ -82,6 +82,13 @@ def _windowize_app (btn):
 
     os.environ['SDL_VIDEO_CENTERED'] = "1"
     pygame.display.set_mode(_win_size, WINDOW_FLAGS)
+
+    w, h = app_state.Window.get_size()
+    new_size = (w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER)
+    new_screen = pygame.Surface(new_size)
+    pygame.transform.scale(app_state.screen, new_size, new_screen)
+    app_state.screen = new_screen
+
     btn.name = "maximize"
     btn.load_img()
     btn.onclick = _maximize_app

@@ -24,11 +24,6 @@ app_state.widgets.append(MenuBar([
     MenuItem("View", 1, None)
     ]))
 
-app_state.widgets += [
-        ScrollBar(640 - 20, 52, 480 - 58, content_size = 800),
-        ScrollBar(4, 458, 640 - 24, content_size = 200000, horizontal = True),
-    ]
-
 
 while rg.app_state.running:
     rg.window_update()
