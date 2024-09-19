@@ -15,7 +15,7 @@
 
 ### Importing
 ```python
-import retro_gui as rg
+import pyretro_gui as rg
 ```
 
 ### Creating a window
