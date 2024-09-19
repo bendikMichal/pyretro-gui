@@ -1,5 +1,6 @@
 <div align="center">
   <h1>PyRetro-Gui</h1>
+  <img src="example.png" />
 </div>
 A cross platform framework for making retro styled apps(even games) that look the same everywhere.
 Written in python provides easy and quick learning curve.
@@ -9,6 +10,7 @@ Written in python provides easy and quick learning curve.
 - [Installation](#Installation)
 - [Docs](docs/docs.md)
 - [OS Support](#Support)
+- [Credit](#Credit)
 
 ## Dependencies
 1. `python3`
@@ -35,3 +37,7 @@ Written in python provides easy and quick learning curve.
 |Windows|Linux|MAC OS|
 |-------|-----|------|
 |100%   |Mostly supported|Not tested|
+
+<hr></hr>
+## Credit
+Inspired by https://www.astralgrave.com/ 's visual style
