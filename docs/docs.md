@@ -56,6 +56,8 @@ rg.app_state.widgets.append(rg.MenuBar([]))
   z_index: int = 0
   ```
 > [!NOTE]
+> The `z_index` does not affect the MenuItem if it is a child of a Widget (eg. [Menu Bar](#Creating-Menu-Bar) or [DropDown](#DropDown)
+> [!NOTE]
 > The `shortcut_fn` gets called on every update, it is upto you to check whether the shortcut have been pressed
 
 - **Examples**
@@ -75,7 +77,7 @@ rg.app_state.widgets.append(rg.MenuBar([]))
   ```python
     rg.MenuItem("File", shortcut = "Alt+F4")
   ```
-    - Advanced menu item that works as a dropdown button, [DropDown params](#DropDown)
+    - Advanced menu item that works as a dropdown button, [DropDown params](#DropDown) takes a list of MenuItems as a param
   ```python
     rg.MenuItem("File", dropdown = rg.DropDown([]))
   ```
@@ -85,8 +87,8 @@ rg.app_state.widgets.append(rg.MenuBar([]))
   ```python
   items: list[MenuItem]
   width: int = 150
-  z_index: int = 0
   ```
+- DropDown takes a list of [MenuItems](#Menu-Item) as a param
 
 
 ### Scrollbar
