@@ -57,6 +57,7 @@ rg.app_state.widgets.append(rg.MenuBar([]))
   ```
 > [!NOTE]
 > The `z_index` does not affect the MenuItem if it is a child of a Widget (eg. [Menu Bar](#Creating-Menu-Bar) or [DropDown](#DropDown)
+
 > [!NOTE]
 > The `shortcut_fn` gets called on every update, it is upto you to check whether the shortcut have been pressed
 
