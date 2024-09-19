@@ -116,7 +116,6 @@ def window_render ():
     if app_state.screen:
         s = app_state.screen.get_size()
         pygame.draw.rect(window, Colors.TEXT, (SCREEN_X_POS - SCR_BORDER, SCREEN_Y_POS - SCR_BORDER, s[0] + SCR_BORDER * 2, s[1] + SCR_BORDER * 2), SCR_BORDER)
-        app_state.screen.fill([255] * 3)
         window.blit(app_state.screen, (SCREEN_X_POS, SCREEN_Y_POS))
     
     # draw widgets

@@ -27,5 +27,6 @@ app_state.widgets.append(MenuBar([
 
 while rg.app_state.running:
     rg.window_update()
+    screen.fill((255, 255, 255))
     rg.window_render()
 
