@@ -1,7 +1,6 @@
 
-import retro_gui as rg
-from retro_gui import app_state, close_app, MenuBar, MenuItem, DropDown
-from scrollbar import ScrollBar
+import pyretro_gui as rg
+from pyretro_gui import app_state, close_app, MenuBar, MenuItem, DropDown, ScrollBar
 
 screen = rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png")
 
@@ -30,9 +29,8 @@ app_state.widgets += [
         ScrollBar(4, 458, 640 - 24, content_size = 200000, horizontal = True),
     ]
 
+
 while rg.app_state.running:
-
     rg.window_update()
-
     rg.window_render()
 

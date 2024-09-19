@@ -3,13 +3,14 @@ import sys, os
 import pygame
 from app_core import app_state
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS
-from retro_screen import get_mouse_pos, x_lib_get_workarea
+from retro_screen import get_mouse_pos
+
+if sys.platform != "win32":
+    from retro_screen import x_lib_get_workarea
 
 pygame.init()
 
-BAR_SIZE        = 32
 WINDOW_FLAGS    = pygame.NOFRAME
-# WINDOW_FLAGS    = pygame.RESIZABLE
 
 if sys.platform == "win32":
     SW_NORMAL   = 1
