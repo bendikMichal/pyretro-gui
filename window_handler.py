@@ -16,6 +16,8 @@ if sys.platform == "win32":
     SW_NORMAL   = 1
     SW_MAXIMIZE = 3
     SW_MINIMIZE = 6
+else:
+    BAR_SIZE = 50
 
 __info = pygame.display.Info()
 _win_size = (0, 0)
@@ -46,9 +48,12 @@ def _maximize_app (btn):
 
     else:
         wa = x_lib_get_workarea()
-        # pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
-        pygame.display.set_mode((wa[2], wa[3]), WINDOW_FLAGS)
-        pygame.display.set_window_position((wa[0], wa[1]))
+        if wa:
+            pygame.display.set_mode((wa[2], wa[3]), WINDOW_FLAGS)
+            pygame.display.set_window_position((wa[0], wa[1]))
+        else:
+            pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
+            pygame.display.set_window_position((0, 0))
 
     w, h = app_state.Window.get_size()
     new_size = (w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER)
