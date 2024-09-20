@@ -9,8 +9,9 @@
 6. [Menu Item](#Menu-Item)
 7. [DropDown](#DropDown)
 8. [Scrollbar](#Scrollbar)
-9. [About widgets](#Widgets)
-10. [Screen](#Screen)
+9. [Buttons](#RetroButton)
+10. [About widgets](#Widgets)
+11. [Screen](#Screen)
 
 
 ### Importing
@@ -97,6 +98,29 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 > Scrollbar is not meant to be used as a standalone widget, doing so will result in a crash of application
 > The intended use for it is inside a Container widget (not made as of yet)
 
+
+### RetroButton
+- `params` :
+  ```python
+    name: str
+    x: int
+    y: int
+    w: int = 32
+    h: int = 32
+    colors: list[tuple] = [(0, 0, 0)] * 2
+    onclick = None
+    onpressed = None
+    anchors: list[int] = [0, 0]
+    z_index: int = 0
+  ```
+- `onclick` gets triggered on release whereas `onpressed` triggers on press
+- `name` a string used to match a *.png from `ui_icons` folder
+> [!NOTE]
+> will get updated to support custom icons and text
+- `anchors` specify whether the button is anchored to the from right or from left
+    - examples:
+        - `anchors = [0, 0]` and x = 0, y = 0, button will be in the top **left** corner
+        - `anchors = [1, 0]` and x = 0, y = 0, button will be in the top **right** corner
 
 ### Widgets
 - Widgets are the core of a PyRetro-Gui app
