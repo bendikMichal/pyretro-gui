@@ -20,7 +20,7 @@ Written in python and provides easy and quick learning curve.
 
 ## Installation
 #### For now
-- Clone repo into your project
+- Clone the repo
   ```
   git clone https://github.com/bendikMichal/pyretro-gui
   ```
