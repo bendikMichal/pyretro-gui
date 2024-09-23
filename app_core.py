@@ -9,10 +9,13 @@ class app_state:
     widgets = []
     _dt = 1
     lt = time.time()
-    
+
+    flags = 0
+
     Window: pygame.Surface = None
     screen: pygame.Surface = None
 
+    moving = False
 
     @staticmethod
     def update_dt ():

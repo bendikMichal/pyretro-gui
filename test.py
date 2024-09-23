@@ -2,7 +2,8 @@
 import pyretro_gui as rg
 from pyretro_gui import app_state, close_app, MenuBar, MenuItem, DropDown, ScrollBar
 
-screen = rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png")
+import pygame
+screen = rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags = pygame.RESIZABLE)
 
 app_state.widgets.append(MenuBar([
     MenuItem("File", 0, DropDown([

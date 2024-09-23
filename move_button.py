@@ -1,6 +1,7 @@
 
 import pygame
 
+from app_core import app_state
 from retro_text import font
 from retro_button import RetroButton
 
@@ -39,6 +40,7 @@ class MoveButton(RetroButton):
         self.focused = r.collidepoint(mouse_pos) or self.pressed
         self.__prev_pressed = self.pressed
         self.pressed = self.focused and mouse_btns[0]
+        app_state.moving = self.pressed and self.onpressed
 
         # pressed
         if self.pressed and self.onpressed:
@@ -52,7 +54,8 @@ class MoveButton(RetroButton):
             if self.onclick:
                 self.onclick(self)
 
-        self.w = win_size[0] - (self.APPICON_SIZE + (self.ICON_SIZE + self.PAD) * 4) + 18
+        neg = int(not app_state.flags & pygame.RESIZABLE)
+        self.w = win_size[0] - (self.APPICON_SIZE + (self.ICON_SIZE + self.PAD) * (4 - neg)) + 18
         self.rect.w = self.w
 
     def render (self, win, win_size):

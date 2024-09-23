@@ -23,6 +23,12 @@ import pyretro_gui as rg
 ```python
 screen = rg.create_window(640, 480, "Test App title", "test_icon.png")
 ```
+- to make a resizable window use `pygame.RESIZABLE`
+```python
+screen = rg.create_window(640, 480, "Test App title", "test_icon.png", flags = pygame.RESIZABLE)
+```
+> [!NOTE]
+> Resizable window is highly experimental and might cause issues such as crashes
 
 ### Setting UI refresh rate 
 > [!NOTE]

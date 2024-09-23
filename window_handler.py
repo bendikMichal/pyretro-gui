@@ -27,6 +27,13 @@ def move_check ():
         print("Unable to get/set window position, update pygame-ce version! Minimum pygame-ce version is >= 2.5.x")
         os._exit(1)
 
+def resize_screen ():
+    w, h = app_state.Window.get_size()
+    new_size = (w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER)
+    new_screen = pygame.Surface(new_size)
+    pygame.transform.scale(app_state.screen, new_size, new_screen)
+    app_state.screen = new_screen
+
 def _maximize_app (btn):
     if sys.platform == "win32":
         move_check()
@@ -40,8 +47,8 @@ def _maximize_app (btn):
         titlebar_h = ctypes.windll.user32.GetSystemMetrics(4)
         size[1] += titlebar_h
 
-        pygame.display.set_mode((1, 1), WINDOW_FLAGS)
-        pygame.display.set_mode(size, WINDOW_FLAGS)
+        pygame.display.set_mode((1, 1), app_state.flags)
+        pygame.display.set_mode(size, app_state.flags)
 
         x, y = pygame.display.get_window_position()
         pygame.display.set_window_position((x, y - titlebar_h))
@@ -55,11 +62,7 @@ def _maximize_app (btn):
             pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
             pygame.display.set_window_position((0, 0))
 
-    w, h = app_state.Window.get_size()
-    new_size = (w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER)
-    new_screen = pygame.Surface(new_size)
-    pygame.transform.scale(app_state.screen, new_size, new_screen)
-    app_state.screen = new_screen
+    resize_screen()
 
     btn.name = "windowize"
     btn.load_img()
@@ -77,6 +80,47 @@ def _move_window (btn):
 
     pygame.display.set_window_position((x, y))
 
+def _rezize_window (border):
+    move_check()
+    if app_state.moving: return
+
+    rv = border.resize_vector
+    op = border.origin_press
+    
+    new_size = list(pygame.display.get_window_size())
+    new_pos = list(pygame.display.get_window_position())
+
+    orig_size = new_size.copy()
+    orig_pos = new_pos.copy()
+
+    mx, my = get_mouse_pos()
+
+    # x
+    if rv[0] > 0:
+        new_size[0] = mx - orig_pos[0]
+
+    if rv[0] < 0:
+        s = orig_pos[0] - mx
+        new_size[0] += s
+        new_pos[0] = mx
+
+    # y
+    if rv[1] > 0:
+        new_size[1] = my - orig_pos[1]
+
+    if rv[1] < 0:
+        # s = orig_pos[1] - my
+        ns = (orig_pos[1] + orig_size[1]) - my
+        # new_size[1] = s + orig_size[1]
+        new_size[1] = ns
+        new_pos[1] = my - op[1]
+        print(my, op, ns)
+
+    pygame.display.set_window_position(new_pos)
+    pygame.display.set_mode(new_size, app_state.flags)
+
+    resize_screen()
+
 
 def _windowize_app (btn):
     if sys.platform == "win32":
@@ -86,13 +130,9 @@ def _windowize_app (btn):
         ctypes.windll.user32.ShowWindow(hwnd, SW_NORMAL)
 
     os.environ['SDL_VIDEO_CENTERED'] = "1"
-    pygame.display.set_mode(_win_size, WINDOW_FLAGS)
+    pygame.display.set_mode(_win_size, app_state.flags)
 
-    w, h = app_state.Window.get_size()
-    new_size = (w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER)
-    new_screen = pygame.Surface(new_size)
-    pygame.transform.scale(app_state.screen, new_size, new_screen)
-    app_state.screen = new_screen
+    resize_screen()
 
     btn.name = "maximize"
     btn.load_img()

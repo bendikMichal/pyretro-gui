@@ -67,8 +67,9 @@ class MenuItem (Widget):
 
 
         # clicked
-        if self.clicked:
+        if self.clicked and (not parent_self or parent_self.opened):
             if self.onclick:
+                print(self.text, mouse_pos, self.focused, self.pressed, self.opened)
                 self.onclick(self)
 
         self.shortcut_fn(self)

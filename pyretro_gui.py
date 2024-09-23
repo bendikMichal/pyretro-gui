@@ -3,6 +3,8 @@ import os, sys
 from re import S
 import pygame
 
+from border import Border
+
 
 pygame.init()
 
@@ -54,9 +56,10 @@ def close_app (_):
     app_state.running = False
 
 
-def create_window (w: int, h: int, caption: str, icon: str | None = None):
+def create_window (w: int, h: int, caption: str, icon: str | None = None, flags: int = 0):
     wh._win_size = (w, h)
-    win = pygame.display.set_mode((w, h), wh.WINDOW_FLAGS)
+    app_state.flags = wh.WINDOW_FLAGS | flags
+    win = pygame.display.set_mode((w, h), app_state.flags)
     pygame.display.set_caption(caption)
 
     ico = None
@@ -71,11 +74,15 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None):
     pad = RetroButton.PAD
     icon_pad = RetroButton.PAD // 2
 
-    create_button("close", pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app)
-    create_button("maximize", icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app)
-    create_button("minimize", (icon_size + icon_pad) * 2 + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app)
-    create_move_button(icon_size * 3 + pad * 3, pad, h = 20, anchors = [1, 0], onpressed = wh._move_window)
-    create_icon(pad, pad, icon = ico)
+    neg = int(not flags & pygame.RESIZABLE)
+    create_button("close", pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app, z_index = 99)
+    create_button("minimize", (icon_size + icon_pad) * (2 - neg) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app, z_index = 99)
+    create_move_button((icon_size + pad) * (3 - neg), pad, h = 20, anchors = [1, 0], onpressed = wh._move_window)
+    create_icon(pad, pad, icon = ico, z_index = 99)
+
+    if flags & pygame.RESIZABLE:
+        create_button("maximize", icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app, z_index = 99)
+        app_state.widgets.append(Border(border_width = 4, onpressed = wh._rezize_window ))
 
 
     app_state.Window = win
@@ -131,26 +138,26 @@ def window_render ():
 
 # UI stuff ======================================
 
-def create_button (name: str, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0]):
+def create_button (name: str, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0], z_index = 0):
     """
     colors: list[tuple] : [normal_color, hover_color] # eg. [(0, 0, 0), (255, 255, 255)] 
     anchors: list[int]  : [right, bottom] # eg. [1, 1]; when used with x = 4, y = 4 the button will be 4 pixels from right edge and 4 pixels from bottom 
     """
-    _btn = RetroButton(name, x, y, w, h, colors, onclick, onpressed, anchors)
+    _btn = RetroButton(name, x, y, w, h, colors, onclick, onpressed, anchors, z_index = z_index)
     app_state.widgets.append(_btn)
     return _btn
 
-def create_move_button (x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], border_color: tuple = Colors.TEXT, shadow_color: tuple = Colors.SHADOW, onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0]):
+def create_move_button (x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], border_color: tuple = Colors.TEXT, shadow_color: tuple = Colors.SHADOW, onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0], z_index = 0):
     """
     colors: list[tuple] : [normal_color, hover_color] # eg. [(0, 0, 0), (255, 255, 255)] 
     anchors: list[int]  : [right, bottom] # eg. [1, 1]; when used with x = 4, y = 4 the button will be 4 pixels from right edge and 4 pixels from bottom 
     """
-    _btn = MoveButton(x, y, w, h, colors, border_color, shadow_color, onclick, onpressed, anchors)
+    _btn = MoveButton(x, y, w, h, colors, border_color, shadow_color, onclick, onpressed, anchors, z_index = z_index)
     app_state.widgets.append(_btn)
     return _btn
 
-def create_icon (x: int, y: int, w: int = 24, h: int = 32, color: tuple = Colors.BG, border_color: tuple = Colors.TEXT, icon: pygame.Surface | None = None, anchors: list[int] = [0, 0]):
-    _btn = RetroIcon(x, y, w, h, color, border_color, icon, anchors)
+def create_icon (x: int, y: int, w: int = 24, h: int = 32, color: tuple = Colors.BG, border_color: tuple = Colors.TEXT, icon: pygame.Surface | None = None, anchors: list[int] = [0, 0], z_index = 0):
+    _btn = RetroIcon(x, y, w, h, color, border_color, icon, anchors, z_index = z_index)
     app_state.widgets.append(_btn)
     return _btn
 
