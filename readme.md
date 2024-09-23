@@ -40,4 +40,4 @@ Written in python and provides easy and quick learning curve.
 -------------------------------------
 
 ## Credit
-Inspired by https://www.astralgrave.com/ 's visual style, (also  his [IG](https://www.instagram.com/SaintJulianXV/))
+Inspired by https://www.astralgrave.com/ 's visual style, (also  his [IG, @saintjulianxv](https://www.instagram.com/SaintJulianXV/))
