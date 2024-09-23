@@ -20,7 +20,7 @@ Written in python and provides easy and quick learning curve.
 
 ## Installation
 #### For now
-- Clone repo into your project
+- Clone the repo
   ```
   git clone https://github.com/bendikMichal/pyretro-gui
   ```
@@ -30,7 +30,7 @@ Written in python and provides easy and quick learning curve.
 > To test if you have installed correct dependencies you can run `python test.py` inside the downloaded repo, you will be presented with test app
 
 #### In the future
-- Hopefully awailable via pip
+- Hopefully available via pip
 
 
 ## Support
@@ -40,4 +40,4 @@ Written in python and provides easy and quick learning curve.
 -------------------------------------
 
 ## Credit
-Inspired by https://www.astralgrave.com/ 's visual style
+Inspired by https://www.astralgrave.com/ 's visual style, (also  his [IG, @saintjulianxv](https://www.instagram.com/SaintJulianXV/))
