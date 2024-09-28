@@ -5,6 +5,11 @@
 A cross platform framework for making retro styled apps(even games) that look the same everywhere.
 Written in python and provides easy and quick learning curve.
 
+
+> [!WARNING]
+> Pyretro-Gui is in very early stages of development
+
+
 ## Table of contents
 - [Dependencies](#Dependencies)
 - [Installation](#Installation)
