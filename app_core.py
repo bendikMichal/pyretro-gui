@@ -14,7 +14,6 @@ class app_state:
     flags = 0
 
     Window: pygame.Surface = None
-    screen: pygame.Surface = None
 
     moving = False
 

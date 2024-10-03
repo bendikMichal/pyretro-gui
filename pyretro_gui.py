@@ -68,7 +68,7 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
         ico = pygame.image.load(icon).convert_alpha()
         pygame.display.set_icon(ico)
 
-    screen = pygame.Surface((w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER))
+    # screen = pygame.Surface((w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER))
     
     # generating ui
     icon_size = RetroButton.ICON_SIZE
@@ -85,10 +85,7 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
         create_button("maximize", icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app, z_index = 99)
         app_state.widgets.append(Border(border_width = 4, onpressed = wh._rezize_window ))
 
-
     app_state.Window = win
-    app_state.screen = screen
-    return screen
 
 
 def window_update ():
@@ -124,12 +121,6 @@ def window_render ():
     win_size = window.get_size()
     window.fill(Colors.BG) 
 
-    # draw screen
-    # if app_state.screen:
-    #     s = app_state.screen.get_size()
-    #     pygame.draw.rect(window, Colors.TEXT, (SCREEN_X_POS - SCR_BORDER, SCREEN_Y_POS - SCR_BORDER, s[0] + SCR_BORDER * 2, s[1] + SCR_BORDER * 2), SCR_BORDER)
-    #     window.blit(app_state.screen, (SCREEN_X_POS, SCREEN_Y_POS))
-    
     # draw widgets
     for w in app_state.widgets:
         w.render(window, window.get_size())

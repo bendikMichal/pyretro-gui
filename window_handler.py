@@ -28,6 +28,7 @@ def move_check ():
         os._exit(1)
 
 def resize_screen ():
+    return
     w, h = app_state.Window.get_size()
     new_size = (w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER)
     new_screen = pygame.Surface(new_size)
@@ -61,8 +62,6 @@ def _maximize_app (btn):
         else:
             pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
             pygame.display.set_window_position((0, 0))
-
-    resize_screen()
 
     btn.name = "windowize"
     btn.load_img()
@@ -119,8 +118,6 @@ def _rezize_window (border):
     pygame.display.set_window_position(new_pos)
     pygame.display.set_mode(new_size, app_state.flags)
 
-    resize_screen()
-
 
 def _windowize_app (btn):
     if sys.platform == "win32":
@@ -131,8 +128,6 @@ def _windowize_app (btn):
 
     os.environ['SDL_VIDEO_CENTERED'] = "1"
     pygame.display.set_mode(_win_size, app_state.flags)
-
-    resize_screen()
 
     btn.name = "maximize"
     btn.load_img()
