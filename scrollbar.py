@@ -38,30 +38,34 @@ class ScrollBar:
         self.name_b = "arrow_" + ("down" if not self.horizontal else "right")
         c = [Colors.BG, Colors.LIGHT_BG]
 
-        self.button_a = RetroButton(self.name_a, self.x, self.y, self.SCRLBAR_WIDTH, self.SCRLBAR_WIDTH, colors = c, onpressed = self.up)
+        self.button_a = RetroButton(self.name_a, self.x, self.y, self.SCRLBAR_WIDTH, self.SCRLBAR_WIDTH, colors = c, onpressed = self.up, anchors = self.anchors)
         s = self.scrl_size + self.SCRLBAR_WIDTH
-        self.button_b = RetroButton(self.name_b, self.x + (0 if not self.horizontal else s), self.y + (0 if self.horizontal else s), self.SCRLBAR_WIDTH, self.SCRLBAR_WIDTH, colors = c, onpressed = self.down)
+        self.button_b = RetroButton(self.name_b, self.x + (0 if not self.horizontal else s), self.y + (0 if self.horizontal else s), self.SCRLBAR_WIDTH, self.SCRLBAR_WIDTH, colors = c, onpressed = self.down, anchors = self.anchors)
 
     def resize (self, size):
         self.size = size
+        self.start = self.x if self.horizontal else self.y
         # btn - the scrolling one
         self.scrl_size = self.size - self.SCRLBAR_WIDTH * 2
         self.btn_size = self.scrl_size * (self.scrl_size / self.content_size)
         if self.btn_size < 8: self.btn_size = 8
 
-        self.btn_pos = (self.scrl_size - self.btn_size) * self.progress
+        self.set_progress(self.progress)
 
     def up (self, _):
         self.btn_pos -= self.row_size * (self.scrl_size / self.content_size)
+        self.update_progress()
 
     def down (self, _):
         self.btn_pos += self.row_size * (self.scrl_size / self.content_size)
+        self.update_progress()
 
     def get_progress (self):
-        return self.btn_pos / (self.scrl_size - self.btn_size)
+        s = self.SCRLBAR_WIDTH
+        return (self.btn_pos - s) / (self.scrl_size - self.btn_size)
 
     def set_progress (self, progress: float):
-        self.btn_pos = (self.scrl_size - self.btn_size) * progress
+        self.btn_pos = (self.scrl_size - self.btn_size) * progress + self.SCRLBAR_WIDTH
         self.progress = progress
 
     def get_rect (self, container_rect):
@@ -75,23 +79,29 @@ class ScrollBar:
 
         return pygame.Rect(x, y, w, h)
 
-    def update (self, mouse_pos, mouse_btns, _, container_rect: pygame.Rect):
+    def update (self, mouse_pos, mouse_btns, container_pos, container_rect: pygame.Rect):
+        # re-calculate mouse pos, because container has different origin
+        mouse_pos = list(mouse_pos)
+        mouse_pos[0] -= container_pos[0]
+        mouse_pos[1] -= container_pos[1]
+
         self.__prev_btn_pressed = self.btn_pressed
 
         self.resize(container_rect.size[int(not self.horizontal)])
 
         # scrollbar button handling
+        r = self.get_rect(container_rect)
         if not self.horizontal:
-            self.btn_rect = pygame.Rect(self.x, self.btn_pos, self.SCRLBAR_WIDTH, self.btn_size)
+            self.btn_rect = pygame.Rect(r.x, r.y + self.btn_pos, self.SCRLBAR_WIDTH, self.btn_size)
             mp = mouse_pos[1]
-            start = self.y
+            self.start = self.y
         else:
-            self.btn_rect = pygame.Rect(self.btn_pos, self.y, self.btn_size, self.SCRLBAR_WIDTH)
+            self.btn_rect = pygame.Rect(r.x + self.btn_pos, r.y, self.btn_size, self.SCRLBAR_WIDTH)
             mp = mouse_pos[0]
-            start = self.x
+            self.start = self.x
 
         # moving cuz of btns
-        start += self.SCRLBAR_WIDTH
+        self.start += self.SCRLBAR_WIDTH
 
         self.btn_focused = self.btn_rect.collidepoint(mouse_pos) or self.btn_pressed
         self.btn_pressed = self.btn_focused and mouse_btns[0]
@@ -99,12 +109,15 @@ class ScrollBar:
         if not self.__prev_btn_pressed and self.btn_pressed: self.mouse_diff = mp - self.btn_pos
         if self.btn_focused and self.btn_pressed: self.btn_pos = mp - self.mouse_diff
 
-        self.button_a.update(mouse_pos, mouse_btns, None)
-        self.button_b.update(mouse_pos, mouse_btns, None)
+        self.button_a.update(mouse_pos, mouse_btns, container_rect.size)
+        self.button_b.update(mouse_pos, mouse_btns, container_rect.size)
 
+        self.update_progress()
+
+    def update_progress (self):
         # keeping in bounds
-        if self.btn_pos < start: self.btn_pos = start
-        if self.btn_pos > start + self.scrl_size - self.btn_size: self.btn_pos = start + self.scrl_size - self.btn_size
+        if self.btn_pos < self.start: self.btn_pos = self.start
+        if self.btn_pos > self.start + self.scrl_size - self.btn_size: self.btn_pos = self.start + self.scrl_size - self.btn_size
 
         self.progress = self.get_progress()
 

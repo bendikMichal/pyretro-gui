@@ -15,6 +15,7 @@ from move_button import MoveButton
 from retro_dropdown import DropDown
 from retro_icon import RetroIcon
 from scrollbar import ScrollBar
+from container import Container
 
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE
 from app_core import app_state
@@ -95,12 +96,16 @@ def window_update ():
     ui_tick()
 
     mouse_pos = None
+    app_state.events = []
     for event in pygame.event.get():
+        app_state.events.append(event)
+
         if event.type == pygame.QUIT:
             app_state.running = False
 
         if event.type == pygame.MOUSEMOTION:
             mouse_pos = event.pos
+
 
     app_state.update_dt()
     
@@ -120,10 +125,10 @@ def window_render ():
     window.fill(Colors.BG) 
 
     # draw screen
-    if app_state.screen:
-        s = app_state.screen.get_size()
-        pygame.draw.rect(window, Colors.TEXT, (SCREEN_X_POS - SCR_BORDER, SCREEN_Y_POS - SCR_BORDER, s[0] + SCR_BORDER * 2, s[1] + SCR_BORDER * 2), SCR_BORDER)
-        window.blit(app_state.screen, (SCREEN_X_POS, SCREEN_Y_POS))
+    # if app_state.screen:
+    #     s = app_state.screen.get_size()
+    #     pygame.draw.rect(window, Colors.TEXT, (SCREEN_X_POS - SCR_BORDER, SCREEN_Y_POS - SCR_BORDER, s[0] + SCR_BORDER * 2, s[1] + SCR_BORDER * 2), SCR_BORDER)
+    #     window.blit(app_state.screen, (SCREEN_X_POS, SCREEN_Y_POS))
     
     # draw widgets
     for w in app_state.widgets:

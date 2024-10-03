@@ -7,6 +7,7 @@ import time
 class app_state:
     running = True
     widgets = []
+    events = []
     _dt = 1
     lt = time.time()
 
