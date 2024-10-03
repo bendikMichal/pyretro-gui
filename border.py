@@ -1,5 +1,6 @@
 
 import pygame
+from app_core import app_state
 
 from retro_screen import get_mouse_pos
 
@@ -46,6 +47,12 @@ class Border:
         bw = self.border_width * 2
         inner_rect = pygame.Rect(self.border_width, self.border_width, self.w - bw, self.h - bw)
 
+        # resize press must not come from inside app
+        if app_state.origin_press is not None:
+            origin_focus = rect.collidepoint(app_state.origin_press) and not inner_rect.collidepoint(app_state.origin_press)
+        else:
+            origin_focus = None
+
         if rect.collidepoint(mouse_pos) and not inner_rect.collidepoint(mouse_pos) or self.pressed:
             self.focused = True
 
@@ -82,7 +89,7 @@ class Border:
         self.set_cursor()
 
         self.__prev_pressed = self.pressed
-        self.pressed = self.focused and mouse_btns[0]
+        self.pressed = self.focused and mouse_btns[0] and (origin_focus or self.pressed)
 
         if self.pressed and self.onpressed:
             if not self.__prev_pressed:

@@ -10,6 +10,7 @@ class app_state:
     events = []
     _dt = 1
     lt = time.time()
+    origin_press = None
 
     flags = 0
 

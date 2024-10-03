@@ -9,9 +9,10 @@
 6. [Menu Item](#Menu-Item)
 7. [DropDown](#DropDown)
 8. [Scrollbar](#Scrollbar)
-9. [Buttons](#RetroButton)
-10. [About widgets](#Widgets)
-11. [Screen](#Screen)
+9. [Container](#Container)
+10. [Buttons](#RetroButton)
+11. [About widgets](#Widgets)
+12. [Screen](#Screen)
 
 
 ### Importing
@@ -21,11 +22,11 @@ import pyretro_gui as rg
 
 ### Creating a window
 ```python
-screen = rg.create_window(640, 480, "Test App title", "test_icon.png")
+rg.create_window(640, 480, "Test App title", "test_icon.png")
 ```
 - to make a resizable window use `pygame.RESIZABLE`
 ```python
-screen = rg.create_window(640, 480, "Test App title", "test_icon.png", flags = pygame.RESIZABLE)
+rg.create_window(640, 480, "Test App title", "test_icon.png", flags = pygame.RESIZABLE)
 ```
 > [!NOTE]
 > Resizable window is highly experimental and might cause issues such as crashes
@@ -104,6 +105,24 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 > Scrollbar is not meant to be used as a standalone widget, doing so will result in a crash of application
 > The intended use for it is inside a Container widget (not made as of yet)
 
+### Container
+- `params` :
+  ```python
+    x: int
+    y: int
+    w: int
+    h: int
+    content_surf: pygame.Surface
+    anchors: list[int] = [0, 0]
+    z_index = -100
+  ```
+> [!NOTE]
+> As of yet Container does not support auto-resizing
+
+- `Container` is a replacement for as of now removed [Screen](#Screen)
+- `content_surf` is a `pygame.Surface` you create and manage yourself
+- Scrollbars are activated automatically based on necessity
+- `LSHIFT + SCROLL` is horizontal scroll
 
 ### RetroButton
 - `params` :
@@ -136,9 +155,10 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 > It is used in some parts of docs for now, since PyRetro-Gui is in very early stages of development.
 
 ### Screen
-- Returned by [rg.create_window](#Creating-a-window)
-- It is a pygame surface that gets drawn at a certain position each render, can be used to render custom ui or other things
+- ~~Returned by [rg.create_window](#Creating-a-window)~~
+- ~~It is a pygame surface that gets drawn at a certain position each render, can be used to render custom ui or other things~~
 > [!WARNING]
-> This part of the framework is untested and will most likely be replaced by a widget in future.
+> ~~This part of the framework is untested and will most likely be replaced by a widget in future.~~
+> `screen` was replaced by [Container](#Container) widget.
 
 

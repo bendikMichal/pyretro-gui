@@ -5,8 +5,10 @@ from pyretro_gui import app_state, close_app, MenuBar, MenuItem, DropDown, Conta
 from constants import SCREEN_X_POS, SCREEN_Y_POS
 
 import pygame
-screen = rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags = pygame.RESIZABLE)
+rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags = pygame.RESIZABLE)
 
+surf = pygame.Surface((50, 50))
+surf.fill([255] * 3)
 img = pygame.image.load("example2.png").convert()
 app_state.widgets.append(
         Container(SCREEN_X_POS, SCREEN_Y_POS, 300, 200, img)
@@ -35,6 +37,5 @@ app_state.widgets.append(MenuBar([
 
 while rg.app_state.running:
     rg.window_update()
-    screen.fill((255, 255, 255))
     rg.window_render()
 

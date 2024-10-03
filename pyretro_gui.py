@@ -88,9 +88,12 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
     app_state.Window = win
 
 
+_prev_pressed = False
 def window_update ():
+    global _prev_pressed
     window = app_state.Window
     ui_tick()
+
 
     mouse_pos = None
     app_state.events = []
@@ -108,6 +111,8 @@ def window_update ():
     
     if not mouse_pos: mouse_pos = pygame.mouse.get_pos()
     mouse_btns = pygame.mouse.get_pressed()
+    if (mouse_btns[0] and not _prev_pressed): app_state.origin_press = mouse_pos
+    _prev_pressed = mouse_btns[0]
 
     app_state.widgets.sort(key = lambda i: i.z_index)
     for w in app_state.widgets:

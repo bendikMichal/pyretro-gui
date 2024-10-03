@@ -6,7 +6,7 @@ from constants import Colors
 from scrollbar import ScrollBar
 
 class Container():
-    def __init__ (self, x, y, w, h, content_surf: pygame.Surface, anchors: list[int] = [0, 0], z_index = -100):
+    def __init__ (self, x: int, y: int, w: int, h: int, content_surf: pygame.Surface, anchors: list[int] = [0, 0], z_index = -100):
 
         self.x, self.y = x, y
         self.w, self.h = w, h
@@ -59,10 +59,11 @@ class Container():
         for event in app_state.events:
             if event.type == pygame.MOUSEWHEEL:
                 s = self.get_x_scrollbar() if pygame.key.get_pressed()[pygame.K_LSHIFT] else self.get_y_scrollbar()
-                if event.y < 0:
-                    s.down(None)
-                elif event.y > 0:
-                    s.up(None)
+                if s is not None:
+                    if event.y < 0:
+                        s.down(None)
+                    elif event.y > 0:
+                        s.up(None)
 
         r = self.get_rect(win_size)
         self.focused = r.collidepoint(mouse_pos)
