@@ -103,7 +103,7 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 ### Scrollbar
 > [!WARNING]
 > Scrollbar is not meant to be used as a standalone widget, doing so will result in a crash of application
-> The intended use for it is inside a Container widget (not made as of yet)
+> The intended use for it is inside a [Container](#Container) widget
 
 ### Container
 - `params` :
