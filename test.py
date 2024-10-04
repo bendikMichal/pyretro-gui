@@ -6,12 +6,13 @@ from constants import SCREEN_X_POS, SCREEN_Y_POS
 
 import pygame
 rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags = pygame.RESIZABLE)
+# rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags = 0)
 
 surf = pygame.Surface((50, 50))
 surf.fill([255] * 3)
-img = pygame.image.load("example2.png").convert()
+img = pygame.image.load("evangelion.jpg").convert()
 app_state.widgets.append(
-        Container(SCREEN_X_POS, SCREEN_Y_POS, 300, 200, img)
+        Container(SCREEN_X_POS, SCREEN_Y_POS, 600, 400, img)
         )
 
 app_state.widgets.append(MenuBar([
