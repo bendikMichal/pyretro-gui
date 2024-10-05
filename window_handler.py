@@ -36,6 +36,7 @@ def resize_screen ():
     app_state.screen = new_screen
 
 def _maximize_app (btn):
+    app_state.windowized_size = pygame.display.get_window_size()
     if sys.platform == "win32":
         move_check()
         pygame.display.set_mode((1, 1), pygame.RESIZABLE)
@@ -125,9 +126,9 @@ def _windowize_app (btn):
         import ctypes
         ctypes.windll.user32.ShowWindow(hwnd, SW_NORMAL)
 
-    os.environ['SDL_VIDEO_CENTERED'] = "1"
-    pygame.display.set_mode(_win_size, app_state.flags)
+    pygame.display.set_mode(app_state.windowized_size, app_state.flags)
 
     btn.name = "maximize"
     btn.load_img()
     btn.onclick = _maximize_app
+

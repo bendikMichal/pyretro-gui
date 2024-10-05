@@ -13,6 +13,8 @@ class app_state:
     origin_press = None
     resizing = False
 
+    windowized_size = (0, 0)
+
     flags = 0
 
     Window: pygame.Surface = None
