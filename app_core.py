@@ -11,6 +11,7 @@ class app_state:
     _dt = 1
     lt = time.time()
     origin_press = None
+    resizing = False
 
     flags = 0
 

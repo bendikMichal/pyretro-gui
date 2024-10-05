@@ -49,7 +49,7 @@ class DropDown:
 
         self.focused = self.rect and self.get_hitbox_rect().collidepoint(mouse_pos)
 
-        if not self.focused and mouse_btns[0] and self.toggle_timer <= 0 and not trigger_focused:
+        if not self.focused and mouse_btns[0] and self.toggle_timer <= 0 and not trigger_focused and not app_state.resizing:
             self.opened = False
 
         for it in self.items:

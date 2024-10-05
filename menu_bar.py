@@ -1,5 +1,6 @@
 
 import pygame
+from app_core import app_state
 
 
 from retro_dropdown import DropDown
@@ -38,7 +39,7 @@ class MenuItem (Widget):
 
     def update (self, mouse_pos, mouse_btns, in_dropdown = False, parent_self = None):
         super().update(mouse_pos, mouse_btns)
-        self.opened = self.focused and mouse_btns[0] and self.dropdown
+        self.opened = self.focused and mouse_btns[0] and self.dropdown and not app_state.resizing
         
         if self.letter_index is not None and self.shortcut_letter is not None:
             keys = pygame.key.get_pressed()

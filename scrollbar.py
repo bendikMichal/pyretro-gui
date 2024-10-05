@@ -1,5 +1,6 @@
 
 import pygame
+from app_core import app_state
 
 from constants import Colors
 from retro_button import RetroButton
@@ -104,7 +105,7 @@ class ScrollBar:
         self.start += self.SCRLBAR_WIDTH
 
         self.btn_focused = self.btn_rect.collidepoint(mouse_pos) or self.btn_pressed
-        self.btn_pressed = self.btn_focused and mouse_btns[0]
+        self.btn_pressed = self.btn_focused and mouse_btns[0] and not app_state.resizing
 
         if not self.__prev_btn_pressed and self.btn_pressed: self.mouse_diff = mp - self.btn_pos
         if self.btn_focused and self.btn_pressed: self.btn_pos = mp - self.mouse_diff

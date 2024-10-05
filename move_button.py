@@ -39,7 +39,7 @@ class MoveButton(RetroButton):
 
         self.focused = r.collidepoint(mouse_pos) or self.pressed
         self.__prev_pressed = self.pressed
-        self.pressed = self.focused and mouse_btns[0]
+        self.pressed = self.focused and mouse_btns[0] and not app_state.resizing
         app_state.moving = self.pressed and self.onpressed
 
         # pressed

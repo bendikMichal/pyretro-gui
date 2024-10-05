@@ -113,7 +113,6 @@ def _rezize_window (border):
         # new_size[1] = s + orig_size[1]
         new_size[1] = ns
         new_pos[1] = my - op[1]
-        print(my, op, ns)
 
     pygame.display.set_window_position(new_pos)
     pygame.display.set_mode(new_size, app_state.flags)

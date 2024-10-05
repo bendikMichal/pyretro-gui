@@ -2,6 +2,8 @@
 import os
 import pygame
 
+from app_core import app_state
+
 class RetroButton:
     ICON_SIZE = 24
     PAD = 6
@@ -52,7 +54,7 @@ class RetroButton:
 
         self.focused = r.collidepoint(mouse_pos) and not self._disabled
         self.__prev_pressed = self.pressed
-        self.pressed = self.focused and mouse_btns[0]
+        self.pressed = self.focused and mouse_btns[0] and not app_state.resizing
 
         # pressed
         if self.pressed and self.onpressed:

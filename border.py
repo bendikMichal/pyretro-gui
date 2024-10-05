@@ -90,6 +90,7 @@ class Border:
 
         self.__prev_pressed = self.pressed
         self.pressed = self.focused and mouse_btns[0] and (origin_focus or self.pressed)
+        app_state.resizing = self.pressed
 
         if self.pressed and self.onpressed:
             if not self.__prev_pressed:
