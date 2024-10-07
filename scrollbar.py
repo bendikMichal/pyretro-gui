@@ -54,11 +54,11 @@ class ScrollBar:
         self.set_progress(self.progress)
 
     def up (self, _):
-        self.btn_pos -= self.row_size * (self.scrl_size / self.content_size)
+        self.btn_pos -= self.row_size * (self.scrl_size / self.content_size) * app_state.get_dt()
         self.update_progress()
 
     def down (self, _):
-        self.btn_pos += self.row_size * (self.scrl_size / self.content_size)
+        self.btn_pos += self.row_size * (self.scrl_size / self.content_size) * app_state.get_dt()
         self.update_progress()
 
     def get_progress (self):

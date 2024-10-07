@@ -65,6 +65,13 @@ class Container():
                     elif event.y > 0:
                         s.up(None)
 
+                sx = self.get_x_scrollbar()
+                if sx is not None:
+                    if event.x < 0:
+                        sx.down(None)
+                    elif event.x > 0:
+                        sx.up(None)
+
         r = self.get_rect(win_size)
         self.focused = r.collidepoint(mouse_pos)
 
