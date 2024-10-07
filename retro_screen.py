@@ -28,6 +28,7 @@ else:
             return True
         else:
           return False
+
     def x_lib_get_workarea ():
         workarea = root.get_full_property(ds.intern_atom('_NET_WORKAREA'), X.AnyPropertyType)
         if workarea is None: return None

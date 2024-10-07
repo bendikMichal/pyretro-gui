@@ -1,8 +1,11 @@
 
 import pygame
+import sys
 
 from app_core import app_state
-from retro_screen import x_can_minimize
+if sys.platform != "win32":
+    from retro_screen import x_can_minimize
+
 from retro_text import font
 from retro_button import RetroButton
 
@@ -55,13 +58,7 @@ class MoveButton(RetroButton):
             if self.onclick:
                 self.onclick(self)
 
-        neg = int(not app_state.flags & pygame.RESIZABLE)
-        if x_can_minimize():
-            pass
-        else:
-            neg+=1
-
-        self.w = win_size[0] - (self.APPICON_SIZE + (self.ICON_SIZE + self.PAD) * (4 - neg)) + 18
+        self.w = win_size[0] - (self.APPICON_SIZE + (self.ICON_SIZE + self.PAD) * (4 - app_state.get_hidden_count())) + 18
         self.rect.w = self.w
 
     def render (self, win, win_size):

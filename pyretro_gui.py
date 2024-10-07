@@ -23,7 +23,9 @@ from app_core import app_state
 import todo
 
 import window_handler as wh
-from  retro_screen import x_can_minimize 
+
+if sys.platform != "win32":
+    from  retro_screen import x_can_minimize 
 
 
 def init ():
@@ -76,13 +78,19 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
     pad = RetroButton.PAD
     icon_pad = RetroButton.PAD // 2
 
-    neg = int(not flags & pygame.RESIZABLE)
+    
+    app_state.set_hidden_count()
+
     create_button("close", pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app, z_index = 99)
-    if x_can_minimize() == True:
-      create_button("minimize", (icon_size + icon_pad) * (2 - neg) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app, z_index = 99)
+
+    _minimize_btn = lambda: create_button("minimize", (icon_size + icon_pad) * (2 - app_state.get_hidden_count()) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app, z_index = 99)
+    if sys.platform != "win32":
+        if x_can_minimize():
+            _minimize_btn()
     else:
-        neg+=1
-    create_move_button((icon_size + pad) * (3 - neg), pad, h = 20, anchors = [1, 0], onpressed = wh._move_window)
+        _minimize_btn()
+
+    create_move_button((icon_size + pad) * (3 - app_state.get_hidden_count()), pad, h = 20, anchors = [1, 0], onpressed = wh._move_window)
     create_icon(pad, pad, icon = ico, z_index = 99)
 
     if flags & pygame.RESIZABLE:
