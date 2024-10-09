@@ -12,6 +12,8 @@ if sys.platform == "win32":
         return (int(p.x), int(p.y))
 else:
     from Xlib import X, display
+    import pygame
+    from Xlib.protocol import event
 
     ds = display.Display()
     root = ds.screen().root
@@ -29,10 +31,19 @@ else:
         else:
           return False
 
-    def x_lib_get_workarea ():
-        workarea = root.get_full_property(ds.intern_atom('_NET_WORKAREA'), X.AnyPropertyType)
-        if workarea is None: return None
-        print(workarea.value)
-        return workarea.value
+    def x_maximize():
+        window_id = pygame.display.get_wm_info()['window']
+        wm_state = ds.intern_atom('_NET_WM_STATE')
+        max_horz = ds.intern_atom('_NET_WM_STATE_MAXIMIZED_HORZ')
+        max_vert = ds.intern_atom('_NET_WM_STATE_MAXIMIZED_VERT')
 
-    x_lib_get_workarea()
+        data = [1, max_horz, max_vert,0,0]
+        e = event.ClientMessage(
+                window=window_id,
+                client_type=wm_state,
+                format=32,
+                data=(32, data)
+            )
+        root.send_event(e, event_mask=X.SubstructureRedirectMask | X.SubstructureNotifyMask)
+        ds.flush()
+

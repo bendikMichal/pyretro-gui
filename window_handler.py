@@ -4,9 +4,8 @@ import pygame
 from app_core import app_state
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS
 from retro_screen import get_mouse_pos
-
 if sys.platform != "win32":
-    from retro_screen import x_lib_get_workarea
+    from retro_screen import x_maximize
 
 pygame.init()
 
@@ -56,13 +55,7 @@ def _maximize_app (btn):
         pygame.display.set_window_position((x, y - titlebar_h))
 
     else:
-        wa = x_lib_get_workarea()
-        if wa:
-            pygame.display.set_mode((wa[2], wa[3]), WINDOW_FLAGS)
-            pygame.display.set_window_position((wa[0], wa[1]))
-        else:
-            pygame.display.set_mode((__info.current_w, __info.current_h - BAR_SIZE), WINDOW_FLAGS)
-            pygame.display.set_window_position((0, 0))
+        x_maximize()
 
     btn.name = "windowize"
     btn.load_img()
