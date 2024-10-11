@@ -3,13 +3,14 @@ import os
 import pygame
 
 from app_core import app_state
+from constants import Colors
 
 class RetroButton:
     ICON_SIZE = 24
     PAD = 6
     ICON_PATH = os.path.abspath(".") + "/ui_icons"
 
-    def __init__ (self, name: str, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [(0, 0, 0)] * 2, onclick = None, onpressed = None, anchors: list[int] = [0, 0], z_index: int = 0):
+    def __init__ (self, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], onclick = None, onpressed = None, anchors: list[int] = [0, 0], z_index: int = 0, name: str | None = None, image_path: str | None = None):
         self.name = name
         self.x = x
         self.y = y
@@ -23,6 +24,8 @@ class RetroButton:
         self.onpressed = onpressed
         self.anchors = anchors
 
+        self.image_path = image_path
+        self.img = None
         self.load_img()
         
         self.focused = False
@@ -33,7 +36,15 @@ class RetroButton:
         self.origin_press = (0, 0)
 
     def load_img (self):
-        self.path = self.ICON_PATH + "/" + self.name + ".png"
+        self.path = None
+        if self.name is not None:
+            self.path = self.ICON_PATH + "/" + self.name + ".png"
+
+        if self.image_path is not None:
+            self.path = self.image_path
+        
+        if self.path is None: return
+
         self.img = pygame.image.load(self.path).convert_alpha()
     
     def get_rect (self, win_size):
@@ -75,7 +86,8 @@ class RetroButton:
         if self.pressed: r.y -= 1
 
         pygame.draw.rect(win, self.colors[int(self.focused)], r)
-        win.blit(self.img, [r.x, r.y])
+        if self.img:
+            win.blit(self.img, [r.x, r.y])
 
 
 

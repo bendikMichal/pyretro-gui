@@ -1,6 +1,6 @@
 
 import os, sys
-from re import S
+from typing_extensions import deprecated
 import pygame
 
 from border import Border
@@ -10,11 +10,15 @@ pygame.init()
 from pygame.version import vernum
 from menu_bar import MenuBar, MenuItem
 from retro_button import RetroButton
+Button = RetroButton
+
 from move_button import MoveButton
 from retro_dropdown import DropDown
 from retro_icon import RetroIcon
+Icon = RetroIcon
 from scrollbar import ScrollBar
 from container import Container
+
 
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE
 from app_core import app_state
@@ -39,8 +43,8 @@ def init ():
 
 
     print("Requirements: ")
-    print("Windows: pygame-ce >= 2.5.x")
-    print("Linux: pygame-ce >= 2.5.x, python-xlib")
+    print("Windows: pygame-ce >= 2.5.x, typing_extensions")
+    print("Linux: pygame-ce >= 2.5.x, python-xlib, typing_extensions")
 
     if vernum.major < 2:
         print("Required major version of pygame-ce is >= 2")
@@ -80,21 +84,21 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
     
     app_state.set_hidden_count()
 
-    create_button("close", pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app, z_index = 99)
+    add_widget(Button(pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app, z_index = 99, name = "close"))
 
-    _minimize_btn = lambda: create_button("minimize", (icon_size + icon_pad) * (2 - app_state.get_hidden_count()) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app, z_index = 99)
+    _minimize_btn = Button((icon_size + icon_pad) * (2 - app_state.get_hidden_count()) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app, z_index = 99, name = "minimize")
     if sys.platform != "win32":
         if x_can_minimize():
-            _minimize_btn()
+            add_widget(_minimize_btn)
     else:
-        _minimize_btn()
+        add_widget(_minimize_btn)
 
-    create_move_button((icon_size + pad) * (3 - app_state.get_hidden_count()), pad, h = 20, anchors = [1, 0], onpressed = wh._move_window)
-    create_icon(pad, pad, icon = ico, z_index = 99)
+    add_widget(MoveButton((icon_size + pad) * (3 - app_state.get_hidden_count()), pad, h = 20, anchors = [1, 0], onpressed = wh._move_window))
+    add_widget(Icon(pad, pad, icon = ico, z_index = 99))
 
     if flags & pygame.RESIZABLE:
-        create_button("maximize", icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app, z_index = 99)
-        app_state.widgets.append(Border(border_width = 4, onpressed = wh._rezize_window ))
+        add_widget(Button(icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app, z_index = 99, name = "maximize"))
+        add_widget(Border(border_width = 4, onpressed = wh._rezize_window ))
 
     app_state.Window = win
 
@@ -149,16 +153,28 @@ def window_render ():
 
 
 # UI stuff ======================================
+def add_widget (Widget):
+    """
+    Widget: Widget
+    Accepts any pyretro-gui Widget instance as a parameter and adds it to the widget list.
+    """
+    if Widget is None:
+        Exception("Widget cannot be None!")
 
+    app_state.widgets.append(Widget)
+    return Widget
+
+@deprecated("Use add_widget() instead")
 def create_button (name: str, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0], z_index = 0):
     """
     colors: list[tuple] : [normal_color, hover_color] # eg. [(0, 0, 0), (255, 255, 255)] 
     anchors: list[int]  : [right, bottom] # eg. [1, 1]; when used with x = 4, y = 4 the button will be 4 pixels from right edge and 4 pixels from bottom 
     """
-    _btn = RetroButton(name, x, y, w, h, colors, onclick, onpressed, anchors, z_index = z_index)
+    _btn = RetroButton(x, y, w, h, colors, onclick, onpressed, anchors, z_index = z_index, name = name)
     app_state.widgets.append(_btn)
     return _btn
 
+@deprecated("Use add_widget() instead")
 def create_move_button (x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], border_color: tuple = Colors.TEXT, shadow_color: tuple = Colors.SHADOW, onclick = None, onpressed = None, anchors: list[int] = [0, 0, 0, 0], z_index = 0):
     """
     colors: list[tuple] : [normal_color, hover_color] # eg. [(0, 0, 0), (255, 255, 255)] 
@@ -168,6 +184,7 @@ def create_move_button (x: int, y: int, w: int = 32, h: int = 32, colors: list[t
     app_state.widgets.append(_btn)
     return _btn
 
+@deprecated("Use add_widget() instead")
 def create_icon (x: int, y: int, w: int = 24, h: int = 32, color: tuple = Colors.BG, border_color: tuple = Colors.TEXT, icon: pygame.Surface | None = None, anchors: list[int] = [0, 0], z_index = 0):
     _btn = RetroIcon(x, y, w, h, color, border_color, icon, anchors, z_index = z_index)
     app_state.widgets.append(_btn)

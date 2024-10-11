@@ -39,9 +39,9 @@ class ScrollBar:
         self.name_b = "arrow_" + ("down" if not self.horizontal else "right")
         c = [Colors.BG, Colors.LIGHT_BG]
 
-        self.button_a = RetroButton(self.name_a, self.x, self.y, self.SCRLBAR_WIDTH, self.SCRLBAR_WIDTH, colors = c, onpressed = self.up, anchors = self.anchors)
+        self.button_a = RetroButton(self.x, self.y, self.SCRLBAR_WIDTH, self.SCRLBAR_WIDTH, colors = c, onpressed = self.up, anchors = self.anchors, name = self.name_a)
         s = self.scrl_size + self.SCRLBAR_WIDTH
-        self.button_b = RetroButton(self.name_b, self.x + (0 if not self.horizontal else s), self.y + (0 if self.horizontal else s), self.SCRLBAR_WIDTH, self.SCRLBAR_WIDTH, colors = c, onpressed = self.down, anchors = self.anchors)
+        self.button_b = RetroButton(self.x + (0 if not self.horizontal else s), self.y + (0 if self.horizontal else s), self.SCRLBAR_WIDTH, self.SCRLBAR_WIDTH, colors = c, onpressed = self.down, anchors = self.anchors, name = self.name_b)
 
     def resize (self, size):
         self.size = size

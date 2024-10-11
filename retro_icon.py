@@ -1,11 +1,12 @@
 
 import pygame
+from constants import Colors
 
 from retro_button import RetroButton
 
 class RetroIcon(RetroButton):
 
-    def __init__(self, x: int, y: int, w: int = 24, h: int = 32, color: tuple = ..., border_color: tuple = ..., icon: pygame.Surface | None = None, anchors: list[int] = [0, 0], z_index: int = 0):
+    def __init__(self, x: int, y: int, w: int = 24, h: int = 32, color: tuple = Colors.BG, border_color: tuple = Colors.TEXT, icon: pygame.Surface | None = None, anchors: list[int] = [0, 0], z_index: int = 0):
         self.x = x
         self.y = y
         self.w = w

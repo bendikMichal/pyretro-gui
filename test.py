@@ -10,7 +10,7 @@ rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags =
 
 surf = pygame.Surface((50, 50))
 surf.fill([255] * 3)
-img = pygame.image.load("evangelion.jpg").convert()
+img = pygame.image.load("example2.png").convert()
 app_state.widgets.append(
         Container(SCREEN_X_POS, SCREEN_Y_POS, 600, 400, img)
         )
