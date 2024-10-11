@@ -25,12 +25,17 @@ Written in python and provides easy and quick learning curve.
   4. `python-xlib`
 
 ## Installation
+> [!NOTE]
+> Now can be installed using `make` too
+
 #### For now
 - Clone the repo
   ```
   git clone https://github.com/bendikMichal/pyretro-gui
+  cd pyretro-gui
   ```
-- Move the files into your project or start working inside of it
+  
+- Move the `pyretro_gui` folder into your project or start working inside of it
 
 > [!NOTE]
 > To test if you have installed correct dependencies you can run `python test.py` inside the downloaded repo, you will be presented with test app
