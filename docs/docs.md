@@ -26,6 +26,7 @@ import pyretro_gui.pyretro_gui as rg
 ```
 
 ### Creating a window
+- recommended icon size is `24x32`px
 ```python
 rg.create_window(640, 480, "Test App title", "test_icon.png")
 ```
