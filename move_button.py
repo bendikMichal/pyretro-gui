@@ -39,6 +39,9 @@ class MoveButton(RetroButton):
         return super().get_rect(win_size)
 
     def update (self, mouse_pos: list[int], mouse_btns: list[bool], win_size):
+        self.w = win_size[0] - (self.APPICON_SIZE + (self.ICON_SIZE + self.PAD) * (4 - app_state.get_hidden_count())) + 18
+        self.rect.w = self.w
+
         r = self.get_rect(win_size)
 
         self.focused = r.collidepoint(mouse_pos) or self.pressed
@@ -58,8 +61,6 @@ class MoveButton(RetroButton):
             if self.onclick:
                 self.onclick(self)
 
-        self.w = win_size[0] - (self.APPICON_SIZE + (self.ICON_SIZE + self.PAD) * (4 - app_state.get_hidden_count())) + 18
-        self.rect.w = self.w
 
     def render (self, win, win_size):
         r = self.get_rect(win_size)

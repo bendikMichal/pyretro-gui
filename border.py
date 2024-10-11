@@ -6,7 +6,7 @@ from retro_screen import get_mouse_pos
 
 
 class Border:
-    def __init__ (self, border_width = 2, onpressed = lambda _: None, z_index = 99):
+    def __init__ (self, border_width = 2, onpressed = lambda _: None, z_index = -99):
         # width as in border width
         self.border_width = border_width
         self.onpressed = onpressed
