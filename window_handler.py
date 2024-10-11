@@ -4,8 +4,10 @@ import pygame
 from app_core import app_state
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS
 
+from retro_screen import get_mouse_pos
+
 if sys.platform != "win32":
-    from retro_screen import get_mouse_pos, x_resize_window, x_maximize
+    from retro_screen import x_resize_window, x_maximize
 
 pygame.init()
 
