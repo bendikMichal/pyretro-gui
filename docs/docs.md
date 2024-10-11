@@ -20,6 +20,10 @@
 ```python
 import pyretro_gui as rg
 ```
+- or if you paste the folder into your project
+```python
+import pyretro_gui.pyretro_gui as rg
+```
 
 ### Creating a window
 ```python
