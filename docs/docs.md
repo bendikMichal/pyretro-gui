@@ -12,7 +12,8 @@
 9. [Container](#Container)
 10. [Buttons](#RetroButton)
 11. [About widgets](#Widgets)
-12. [Screen](#Screen)
+12. [Adding widgets](#Adding-Widgets)
+13. [Screen](#Screen)
 
 
 ### Importing
@@ -48,7 +49,7 @@ while rg.app_state.running:
 ### Creating Menu Bar
 - `MenuBar` takes a list of [Menu Items](#Menu-Item) as an argument
 ```python
-rg.app_state.widgets.append(rg.MenuBar([]))
+rg.add_widget(rg.MenuBar([]))
 ```
 
 ### Menu Item
@@ -125,9 +126,9 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 - `LSHIFT + SCROLL` is horizontal scroll
 
 ### RetroButton
+- Also `Button`
 - `params` :
   ```python
-    name: str
     x: int
     y: int
     w: int = 32
@@ -137,11 +138,14 @@ rg.app_state.widgets.append(rg.MenuBar([]))
     onpressed = None
     anchors: list[int] = [0, 0]
     z_index: int = 0
+    name: str | None = None
+    image_path: str | None = None
   ```
 - `onclick` gets triggered on release whereas `onpressed` triggers on press
 - `name` a string used to match a *.png from `ui_icons` folder
 > [!NOTE]
-> will get updated to support custom icons and text
+> ~~will get updated to support custom icons~~ and text
+> Should now support custom icons
 - `anchors` specify whether the button is anchored to the from right or from left
     - examples:
         - `anchors = [0, 0]` and x = 0, y = 0, button will be in the top **left** corner
@@ -149,10 +153,18 @@ rg.app_state.widgets.append(rg.MenuBar([]))
 
 ### Widgets
 - Widgets are the core of a PyRetro-Gui app
-- `rg.app_state.widgets` is a list of all the existing ui elements
+- `rg.app_state.widgets` is an internal list of all the existing ui elements
 > [!NOTE]
-> This list is internal and should not be used if possible, as using it directly is not the intended usage.
-> It is used in some parts of docs for now, since PyRetro-Gui is in very early stages of development.
+> This list is internal and should NOT be used if possible, as using it directly is not the intended usage.
+> ~~It is used in some parts of docs for now, since PyRetro-Gui is in very early stages of development.~~
+> `add_widget()` function has been added. Check [Adding widgets](#Adding-Widgets)
+
+### Adding Widgets
+- You can add any pyretro-gui widget by using
+```python
+rg.add_widget(widget_instance)
+```
+- `add_widget` returns added widget
 
 ### Screen
 - ~~Returned by [rg.create_window](#Creating-a-window)~~
