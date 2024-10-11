@@ -26,7 +26,7 @@ from .app_core import app_state
 
 from .todo import *
 
-from .window_handler import *
+from .window_handler import _move_window, _maximize_app, _minimize_app, _rezize_window, WINDOW_FLAGS
 
 if sys.platform != "win32":
     from .retro_screen import x_can_minimize 
