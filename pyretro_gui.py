@@ -5,7 +5,6 @@ import pygame
 
 from border import Border
 
-
 pygame.init()
 
 from pygame.version import vernum

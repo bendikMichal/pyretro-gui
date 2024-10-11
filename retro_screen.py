@@ -11,9 +11,9 @@ if sys.platform == "win32":
         ctypes.windll.user32.GetCursorPos(ctypes.byref(p))
         return (int(p.x), int(p.y))
 else:
-    from Xlib import X, display
-    import pygame
+    from Xlib import X, display, Xatom
     from Xlib.protocol import event
+    import pygame
 
     ds = display.Display()
     root = ds.screen().root
@@ -22,7 +22,7 @@ else:
         p = root.query_pointer()
         return (p.root_x, p.root_y)
     
-    def x_can_minimize():
+    def x_can_minimize ():
         allowed = root.get_full_property(ds.intern_atom('_NET_SUPPORTED'), X.AnyPropertyType)
         if allowed is None:
             return False
@@ -31,13 +31,13 @@ else:
         else:
           return False
 
-    def x_maximize():
+    def x_maximize ():
         window_id = pygame.display.get_wm_info()['window']
         wm_state = ds.intern_atom('_NET_WM_STATE')
         max_horz = ds.intern_atom('_NET_WM_STATE_MAXIMIZED_HORZ')
         max_vert = ds.intern_atom('_NET_WM_STATE_MAXIMIZED_VERT')
 
-        data = [1, max_horz, max_vert,0,0]
+        data = [1, max_horz, max_vert, 0, 0]
         e = event.ClientMessage(
                 window=window_id,
                 client_type=wm_state,
@@ -45,5 +45,13 @@ else:
                 data=(32, data)
             )
         root.send_event(e, event_mask=X.SubstructureRedirectMask | X.SubstructureNotifyMask)
+        ds.flush()
+
+    def x_resize_window (new_size: list[int]):
+        window_id = pygame.display.get_wm_info()['window']
+
+        twindow = ds.create_resource_object('window', window_id)
+        twindow.configure(width = new_size[0], height = new_size[1])
+
         ds.flush()
 

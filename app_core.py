@@ -19,6 +19,7 @@ class app_state:
     hidden_buttons_count = 0
 
     windowized_size = (0, 0)
+    windowized_pos = (0, 0)
 
     flags = 0
 

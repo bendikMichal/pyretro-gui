@@ -3,9 +3,9 @@ import sys, os
 import pygame
 from app_core import app_state
 from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS
-from retro_screen import get_mouse_pos
+
 if sys.platform != "win32":
-    from retro_screen import x_maximize
+    from retro_screen import get_mouse_pos, x_resize_window, x_maximize
 
 pygame.init()
 
@@ -36,6 +36,7 @@ def resize_screen ():
 
 def _maximize_app (btn):
     app_state.windowized_size = pygame.display.get_window_size()
+    app_state.windowized_pos = pygame.display.get_window_position()
     if sys.platform == "win32":
         move_check()
         pygame.display.set_mode((1, 1), pygame.RESIZABLE)
@@ -108,8 +109,14 @@ def _rezize_window (border):
         new_size[1] = ns
         new_pos[1] = my - op[1]
 
+
+    if sys.platform == "win32":
+        # this caused flickering on linux
+        pygame.display.set_mode(new_size, app_state.flags)
+    else:
+        x_resize_window(new_size)
+
     pygame.display.set_window_position(new_pos)
-    pygame.display.set_mode(new_size, app_state.flags)
 
 
 def _windowize_app (btn):
@@ -120,6 +127,8 @@ def _windowize_app (btn):
         ctypes.windll.user32.ShowWindow(hwnd, SW_NORMAL)
 
     pygame.display.set_mode(app_state.windowized_size, app_state.flags)
+    if sys.platform != "win32":
+        pygame.display.set_window_position(app_state.windowized_pos)
 
     btn.name = "maximize"
     btn.load_img()
