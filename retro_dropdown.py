@@ -1,10 +1,10 @@
 
 import pygame
 
-from constants import Colors, UI_FPS
-from app_core import app_state
+from .constants import Colors, UI_FPS
+from .app_core import app_state
 
-from retro_text import font
+from .retro_text import font
 
 class DropDown:
     X_OFF               = 2

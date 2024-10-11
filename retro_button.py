@@ -2,13 +2,14 @@
 import os
 import pygame
 
-from app_core import app_state
-from constants import Colors
+from .app_core import app_state
+from .constants import Colors
+from .path_handler import base_path
 
 class RetroButton:
     ICON_SIZE = 24
     PAD = 6
-    ICON_PATH = os.path.abspath(".") + "/ui_icons"
+    ICON_PATH = base_path + "/ui_icons"
 
     def __init__ (self, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], onclick = None, onpressed = None, anchors: list[int] = [0, 0], z_index: int = 0, name: str | None = None, image_path: str | None = None):
         self.name = name

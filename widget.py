@@ -1,5 +1,5 @@
 
-from app_core import app_state
+from .app_core import app_state
 
 
 class Widget:

@@ -1,11 +1,13 @@
 
-import pyretro_gui as rg
-from pyretro_gui import app_state, close_app, MenuBar, MenuItem, DropDown, Container
+# do NOT learn from this file
+# import pyretro_gui as rg
+__package__ = "pyretro_gui"
+from .pyretro_gui import app_state, close_app, MenuBar, MenuItem, DropDown, Container, create_window, window_update, window_render
 
-from constants import SCREEN_X_POS, SCREEN_Y_POS
+from .constants import SCREEN_X_POS, SCREEN_Y_POS
 
 import pygame
-rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags = pygame.RESIZABLE)
+create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags = pygame.RESIZABLE)
 # rg.create_window(640, 480, "copy - untitled_image.png", "testicon2.png", flags = 0)
 
 surf = pygame.Surface((50, 50))
@@ -36,7 +38,7 @@ app_state.widgets.append(MenuBar([
     ]))
 
 
-while rg.app_state.running:
-    rg.window_update()
-    rg.window_render()
+while app_state.running:
+    window_update()
+    window_render()
 

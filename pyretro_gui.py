@@ -1,34 +1,35 @@
 
+print(f"{__package__ = }, {__name__ = }")
+# __package__ = "pyretro_gui"
+
 import os, sys
 from typing_extensions import deprecated
 import pygame
 
-from border import Border
-
 pygame.init()
-
 from pygame.version import vernum
-from menu_bar import MenuBar, MenuItem
-from retro_button import RetroButton
+
+from .border import Border
+from .menu_bar import MenuBar, MenuItem
+from .retro_button import RetroButton
 Button = RetroButton
 
-from move_button import MoveButton
-from retro_dropdown import DropDown
-from retro_icon import RetroIcon
+from .move_button import MoveButton
+from .retro_dropdown import DropDown
+from .retro_icon import RetroIcon
 Icon = RetroIcon
-from scrollbar import ScrollBar
-from container import Container
+from .scrollbar import ScrollBar
+from .container import Container
 
+from .constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE
+from .app_core import app_state
 
-from constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE
-from app_core import app_state
+from .todo import *
 
-import todo
-
-import window_handler as wh
+from .window_handler import *
 
 if sys.platform != "win32":
-    from  retro_screen import x_can_minimize 
+    from .retro_screen import x_can_minimize 
 
 
 def init ():
@@ -64,8 +65,8 @@ def close_app (_):
 
 
 def create_window (w: int, h: int, caption: str, icon: str | None = None, flags: int = 0):
-    wh._win_size = (w, h)
-    app_state.flags = wh.WINDOW_FLAGS | flags
+    _win_size = (w, h)
+    app_state.flags = WINDOW_FLAGS | flags
     win = pygame.display.set_mode((w, h), app_state.flags)
     pygame.display.set_caption(caption)
 
@@ -86,19 +87,19 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
 
     add_widget(Button(pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app, z_index = 99, name = "close"))
 
-    _minimize_btn = Button((icon_size + icon_pad) * (2 - app_state.get_hidden_count()) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._minimize_app, z_index = 99, name = "minimize")
+    _minimize_btn = Button((icon_size + icon_pad) * (2 - app_state.get_hidden_count()) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _minimize_app, z_index = 99, name = "minimize")
     if sys.platform != "win32":
         if x_can_minimize():
             add_widget(_minimize_btn)
     else:
         add_widget(_minimize_btn)
 
-    add_widget(MoveButton((icon_size + pad) * (3 - app_state.get_hidden_count()), pad, h = 20, anchors = [1, 0], onpressed = wh._move_window))
+    add_widget(MoveButton((icon_size + pad) * (3 - app_state.get_hidden_count()), pad, h = 20, anchors = [1, 0], onpressed = _move_window))
     add_widget(Icon(pad, pad, icon = ico, z_index = 99))
 
     if flags & pygame.RESIZABLE:
-        add_widget(Button(icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = wh._maximize_app, z_index = 99, name = "maximize"))
-        add_widget(Border(border_width = 4, onpressed = wh._rezize_window ))
+        add_widget(Button(icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _maximize_app, z_index = 99, name = "maximize"))
+        add_widget(Border(border_width = 4, onpressed = _rezize_window ))
 
     app_state.Window = win
 

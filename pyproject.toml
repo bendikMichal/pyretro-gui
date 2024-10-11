@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyretro_gui"
+version = "0.0.0"
+authors = [
+  { name="noTme" },
+]
+description = "Retro app framework"
+readme = "readme.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*"]
+
+[project.urls]
+Homepage = "https://github.com/bendikMichal/pyretro-gui"
+Issues = "https://github.com/bendikMichal/pyretro-gui/issues"

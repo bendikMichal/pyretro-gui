@@ -1,9 +1,8 @@
 
 import pygame
-from app_core import app_state
 
-from retro_screen import get_mouse_pos
-
+from .app_core import app_state
+from .retro_screen import get_mouse_pos
 
 class Border:
     def __init__ (self, border_width = 2, onpressed = lambda _: None, z_index = -99):

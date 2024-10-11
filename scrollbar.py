@@ -1,9 +1,9 @@
 
 import pygame
-from app_core import app_state
+from .app_core import app_state
 
-from constants import Colors
-from retro_button import RetroButton
+from .constants import Colors
+from .retro_button import RetroButton
 
 
 class ScrollBar:

@@ -1,8 +1,8 @@
 
 import pygame
-from constants import Colors
 
-from retro_button import RetroButton
+from .constants import Colors
+from .retro_button import RetroButton
 
 class RetroIcon(RetroButton):
 

@@ -2,13 +2,13 @@
 import pygame
 import sys
 
-from app_core import app_state
-from constants import Colors
+from .app_core import app_state
+from .constants import Colors
 if sys.platform != "win32":
-    from retro_screen import x_can_minimize
+    from .retro_screen import x_can_minimize
 
-from retro_text import font
-from retro_button import RetroButton
+from .retro_text import font
+from .retro_button import RetroButton
 
 pygame.font.init()
 

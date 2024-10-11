@@ -1,9 +1,9 @@
 
 import pygame
-from app_core import app_state
-from constants import Colors
+from .app_core import app_state
+from .constants import Colors
 
-from scrollbar import ScrollBar
+from .scrollbar import ScrollBar
 
 class Container():
     def __init__ (self, x: int, y: int, w: int, h: int, content_surf: pygame.Surface, anchors: list[int] = [0, 0], z_index = -100):

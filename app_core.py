@@ -3,9 +3,9 @@ import pygame
 import sys
 
 if sys.platform != "win32":
-    from retro_screen import x_can_minimize
+    from .retro_screen import x_can_minimize
 
-from constants import UI_FPS
+from .constants import UI_FPS
 
 import time
 class app_state:

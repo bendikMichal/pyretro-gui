@@ -1,13 +1,12 @@
 
 import pygame
-from app_core import app_state
 
+from .widget import Widget
+from .retro_dropdown import DropDown
 
-from retro_dropdown import DropDown
-
-from constants import Colors
-from retro_text import font, small_font
-from widget import Widget
+from .app_core import app_state
+from .constants import Colors
+from .retro_text import font, small_font
 
 
 class MenuItem (Widget):
