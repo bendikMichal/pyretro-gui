@@ -20,8 +20,9 @@ Written in python and provides easy and quick learning curve.
 ## Dependencies
 1. `python3`
 2. `pygame-ce` >= 2.5.0
+3. `typing-extensions`
 - Linux specific:
-  3. `python-xlib`
+  4. `python-xlib`
 
 ## Installation
 #### For now
