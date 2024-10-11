@@ -11,7 +11,7 @@ if sys.platform == "win32":
         ctypes.windll.user32.GetCursorPos(ctypes.byref(p))
         return (int(p.x), int(p.y))
 else:
-    from Xlib import X, display, Xatom
+    from Xlib import X, display
     from Xlib.protocol import event
     import pygame
 
