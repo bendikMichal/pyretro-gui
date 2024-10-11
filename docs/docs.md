@@ -160,7 +160,7 @@ rg.add_widget(rg.MenuBar([]))
 > `add_widget()` function has been added. Check [Adding widgets](#Adding-Widgets)
 
 ### Adding Widgets
-- You can add any pyretro-gui widget by using
+- You can add any pyretro-gui widget by doing
 ```python
 rg.add_widget(widget_instance)
 ```
