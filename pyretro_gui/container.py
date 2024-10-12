@@ -6,7 +6,7 @@ from .constants import Colors
 from .scrollbar import ScrollBar
 
 class Container():
-    def __init__ (self, x: int, y: int, w: int, h: int, content_surf: pygame.Surface, anchors: list[int] = [0, 0], z_index = -100):
+    def __init__ (self, x: int, y: int, w: int, h: int, content_surf: pygame.Surface, onclick = None, onpressed = None, anchors: list[int] = [0, 0], z_index = -100):
 
         self.x, self.y = x, y
         self.w, self.h = w, h
@@ -17,8 +17,13 @@ class Container():
         self.content_size[0] += ScrollBar.SCRLBAR_WIDTH
         self.content_size[1] += ScrollBar.SCRLBAR_WIDTH
         
+        self.onclick = onclick
+        self.onpressed = onpressed
         self.anchors = anchors
         self.z_index = z_index
+
+        self.pressed = False
+        self.__prev_pressed = self.pressed
 
         self.is_scroll_x = self.content_size[0] > w
         self.is_scroll_y = self.content_size[1] > h
@@ -73,7 +78,24 @@ class Container():
                         sx.down(None)
 
         r = self.get_rect(win_size)
+
         self.focused = r.collidepoint(mouse_pos)
+        self.__prev_pressed = self.pressed
+        self.pressed = self.focused and mouse_btns[0] and not app_state.resizing
+
+        mpos_inside = (mouse_pos[0] - r.x, mouse_pos[1] - r.y)
+
+        # pressed
+        if self.pressed and self.onpressed:
+            if not self.__prev_pressed:
+                self.origin_press = mouse_pos
+
+            self.onpressed(self, mpos_inside)
+
+        # clicked
+        if not self.pressed and self.__prev_pressed and self.focused:
+            if self.onclick:
+                self.onclick(self, mpos_inside)
 
         for s in self.scrollbars:
             s.update(mouse_pos, mouse_btns, self.get_rect(win_size).topleft, self._surface.get_rect())
