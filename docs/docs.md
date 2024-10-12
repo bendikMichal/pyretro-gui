@@ -115,6 +115,8 @@ rg.add_widget(rg.MenuBar([]))
     w: int
     h: int
     content_surf: pygame.Surface
+    onclick: fn | None = None
+    onpress: fn | None = None
     anchors: list[int] = [0, 0]
     z_index = -100
   ```
@@ -122,6 +124,7 @@ rg.add_widget(rg.MenuBar([]))
 > As of yet Container does not support auto-resizing
 
 - `Container` is a replacement for as of now removed [Screen](#Screen)
+- `onclick` and `onpress` both take a function as a value. The function gets called with 2 arguments: `self`, `position_of_click`
 - `content_surf` is a `pygame.Surface` you create and manage yourself
 - Scrollbars are activated automatically based on necessity
 - `LSHIFT + SCROLL` is horizontal scroll
