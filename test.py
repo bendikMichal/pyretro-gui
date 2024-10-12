@@ -15,6 +15,7 @@ surf.fill([255] * 3)
 img = pygame.image.load("example2.png").convert()
 app_state.widgets.append(
         Container(SCREEN_X_POS, SCREEN_Y_POS, 600, 400, img)
+        # Container(SCREEN_X_POS, SCREEN_Y_POS, img.get_width(), img.get_height(), img)
         )
 
 app_state.widgets.append(MenuBar([

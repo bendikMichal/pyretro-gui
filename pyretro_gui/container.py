@@ -14,8 +14,6 @@ class Container():
 
         self.content_surf = content_surf
         self.content_size = list(content_surf.get_size())
-        self.content_size[0] += ScrollBar.SCRLBAR_WIDTH
-        self.content_size[1] += ScrollBar.SCRLBAR_WIDTH
         
         self.onclick = onclick
         self.onpressed = onpressed
@@ -32,9 +30,11 @@ class Container():
 
         if self.is_scroll_x:
             self.scrollbars.append(ScrollBar(0, 0, w - 16, self.content_size[0], horizontal = True, anchors = [0, 1]))
+            self.content_size[0] += ScrollBar.SCRLBAR_WIDTH
 
         if self.is_scroll_y:
             self.scrollbars.append(ScrollBar(0, 0, h, self.content_size[1], anchors = [1, 0]))
+            self.content_size[1] += ScrollBar.SCRLBAR_WIDTH
 
     def get_surface (self):
         return self._surface
