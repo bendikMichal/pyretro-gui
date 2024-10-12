@@ -22,6 +22,9 @@ class Container():
 
         self.pressed = False
         self.__prev_pressed = self.pressed
+        
+        self.mpos_inside = None
+        self._prev_pos_inside = None
 
         self.is_scroll_x = self.content_size[0] > w
         self.is_scroll_y = self.content_size[1] > h
@@ -83,19 +86,20 @@ class Container():
         self.__prev_pressed = self.pressed
         self.pressed = self.focused and mouse_btns[0] and not app_state.resizing
 
-        mpos_inside = (mouse_pos[0] - r.x, mouse_pos[1] - r.y)
+        self._prev_pos_inside = self.mpos_inside if self.mpos_inside is not None else (mouse_pos[0] - r.x, mouse_pos[1] - r.y)
+        self.mpos_inside = (mouse_pos[0] - r.x, mouse_pos[1] - r.y)
 
         # pressed
         if self.pressed and self.onpressed:
             if not self.__prev_pressed:
                 self.origin_press = mouse_pos
 
-            self.onpressed(self, mpos_inside)
+            self.onpressed(self, self.mpos_inside)
 
         # clicked
         if not self.pressed and self.__prev_pressed and self.focused:
             if self.onclick:
-                self.onclick(self, mpos_inside)
+                self.onclick(self, self.mpos_inside)
 
         for s in self.scrollbars:
             s.update(mouse_pos, mouse_btns, self.get_rect(win_size).topleft, self._surface.get_rect())
