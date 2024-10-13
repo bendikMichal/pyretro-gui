@@ -28,9 +28,6 @@ from .todo import *
 
 from .window_handler import _move_window, _maximize_app, _minimize_app, _rezize_window, WINDOW_FLAGS
 
-if sys.platform != "win32":
-    from .retro_screen import x_can_minimize 
-
 
 def init ():
     print(
@@ -83,23 +80,30 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
     icon_pad = RetroButton.PAD // 2
 
     
-    app_state.set_hidden_count()
+    app_state.set_visible_count()
 
     add_widget(Button(pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app, z_index = 99, name = "close"))
+    _minimize_btn = Button((app_state.get_visible_count()-1)*(icon_size+icon_pad)+pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _minimize_app, z_index = 99, name = "minimize")
 
-    _minimize_btn = Button((icon_size + icon_pad) * (2 - app_state.get_hidden_count()) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _minimize_app, z_index = 99, name = "minimize")
+    _maximize_button = Button(icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _maximize_app, z_index = 99, name = "maximize")
     if sys.platform != "win32":
-        if x_can_minimize():
+        if app_state.get_visible_count() == 3:
+            add_widget(_minimize_btn)
+            add_widget(_maximize_button)
+            add_widget(Border(border_width = 4, onpressed = _rezize_window ))
+        elif app_state.get_visible_count() == 2:
             add_widget(_minimize_btn)
     else:
-        add_widget(_minimize_btn)
 
-    add_widget(MoveButton((icon_size + pad) * (3 - app_state.get_hidden_count()), pad, h = 20, anchors = [1, 0], onpressed = _move_window))
+        add_widget(_minimize_btn)
+        if flags & pygame.RESIZABLE:
+            add_widget(Button(icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _maximize_app, z_index = 99, name = "maximize"))
+            add_widget(Border(border_width = 4, onpressed = _rezize_window ))
+
+
+    add_widget(MoveButton(app_state.get_visible_count()*(icon_size+icon_pad)+pad, pad, h = 20, anchors = [1, 0], onpressed = _move_window))
     add_widget(Icon(pad, pad, icon = ico, z_index = 99))
 
-    if flags & pygame.RESIZABLE:
-        add_widget(Button(icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _maximize_app, z_index = 99, name = "maximize"))
-        add_widget(Border(border_width = 4, onpressed = _rezize_window ))
 
     app_state.Window = win
 

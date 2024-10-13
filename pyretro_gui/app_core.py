@@ -16,7 +16,7 @@ class app_state:
     lt = time.time()
     origin_press = None
     resizing = False
-    hidden_buttons_count = 0
+    visible_buttons_count = 3
 
     windowized_size = (0, 0)
     windowized_pos = (0, 0)
@@ -28,15 +28,18 @@ class app_state:
     moving = False
 
     @staticmethod
-    def set_hidden_count ():
-        app_state.hidden_buttons_count = int(not app_state.flags & pygame.RESIZABLE)
+    def set_visible_count ():
+        app_state.visible_buttons_count = 3
+        if not(app_state.flags & pygame.RESIZABLE):
+            app_state.visible_buttons_count -= 1
         if sys.platform != "win32":
-            # + 1 if can not minimize
-            app_state.hidden_buttons_count += int(not x_can_minimize())
+            if not(x_can_minimize()):
+                app_state.visible_buttons_count = 1
+
 
     @staticmethod
-    def get_hidden_count ():
-        return app_state.hidden_buttons_count
+    def get_visible_count ():
+        return app_state.visible_buttons_count
 
     @staticmethod
     def update_dt ():
