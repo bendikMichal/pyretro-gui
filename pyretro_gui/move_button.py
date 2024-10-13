@@ -39,8 +39,9 @@ class MoveButton(RetroButton):
     def get_rect (self, win_size):
         return super().get_rect(win_size)
 
+
     def update (self, mouse_pos: list[int], mouse_btns: list[bool], win_size):
-        self.w = win_size[0] - (self.APPICON_SIZE + (self.ICON_SIZE + self.PAD) * (4 - app_state.get_hidden_count())) + 18
+        self.w = win_size[0] - self.APPICON_SIZE - 2*self.PAD - (app_state.visible_buttons_count*(self.ICON_SIZE+self.PAD//2)) - self.PAD
         self.rect.w = self.w
 
         r = self.get_rect(win_size)
