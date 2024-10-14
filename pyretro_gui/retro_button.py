@@ -3,6 +3,7 @@ import os
 import pygame
 
 from .app_core import app_state
+from .retro_text import font
 from .constants import Colors
 from .path_handler import base_path
 
@@ -11,7 +12,7 @@ class RetroButton:
     PAD = 6
     ICON_PATH = base_path + "/ui_icons"
 
-    def __init__ (self, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], onclick = None, onpressed = None, anchors: list[int] = [0, 0], z_index: int = 0, name: str | None = None, image_path: str | None = None):
+    def __init__ (self, x: int, y: int, w: int = 32, h: int = 32, colors: list[tuple] = [Colors.BG, Colors.LIGHT_BG], onclick = None, onpressed = None, anchors: list[int] = [0, 0], z_index: int = 0, name: str | None = None, image_path: str | None = None, text: str | None = None):
         self.name = name
         self.x = x
         self.y = y
@@ -19,6 +20,8 @@ class RetroButton:
         self.h = h
         self.rect = pygame.Rect(x, y, w, h)
         self.colors = colors
+
+        self.text = text
         
         self.z_index = z_index
         self.onclick = onclick
@@ -89,6 +92,16 @@ class RetroButton:
         pygame.draw.rect(win, self.colors[int(self.focused)], r)
         if self.img:
             win.blit(self.img, [r.x, r.y])
+
+        if self.text:
+            pygame.draw.rect(win, Colors.TEXT, [r.x, r.y, r.w + 1, r.h + 2], 1)
+            pygame.draw.rect(win, Colors.LIGHT_BG, r, 1)
+            pygame.draw.line(win, Colors.TEXT, (r.x, r.y + r.h), (r.x + r.w - 1, r.y + r.h), 1)
+
+            text_surf = font.render(self.text, False, Colors.TEXT)
+            self.w = text_surf.get_width() + 8
+
+            win.blit(text_surf, [r.x + 4, r.y + 3])
 
 
 

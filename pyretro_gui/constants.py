@@ -16,3 +16,10 @@ SCR_BORDER      = 1
 SCREEN_PAD      = 5
 SCREEN_X_POS    = SCREEN_PAD
 SCREEN_Y_POS    = 53
+
+class Flags:
+    MINMAX_DISABLED = 1
+
+class DialogStatus:
+    CLOSE = 0
+    OK = 1

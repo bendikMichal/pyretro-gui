@@ -5,7 +5,7 @@ import sys
 if sys.platform != "win32":
     from .retro_screen import x_can_minimize
 
-from .constants import UI_FPS
+from .constants import UI_FPS, Flags
 
 import time
 class app_state:
@@ -22,6 +22,7 @@ class app_state:
     windowized_pos = (0, 0)
 
     flags = 0
+    titlebar_flags = 0
 
     Window: pygame.Surface = None
 
@@ -35,6 +36,9 @@ class app_state:
         if sys.platform != "win32":
             if not(x_can_minimize()):
                 app_state.visible_buttons_count = 1
+
+        if app_state.titlebar_flags & Flags.MINMAX_DISABLED:
+            app_state.visible_buttons_count = 1
 
 
     @staticmethod

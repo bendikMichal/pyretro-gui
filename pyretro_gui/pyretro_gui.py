@@ -21,13 +21,14 @@ Icon = RetroIcon
 from .scrollbar import ScrollBar
 from .container import Container
 
-from .constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE
+from .constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE, Flags, DialogStatus
 from .app_core import app_state
 
 from .todo import *
 
 from .window_handler import _move_window, _maximize_app, _minimize_app, _rezize_window, WINDOW_FLAGS
 
+from .dialog import open_dialog
 
 def init ():
     print(
@@ -61,9 +62,10 @@ def close_app (_):
     app_state.running = False
 
 
-def create_window (w: int, h: int, caption: str, icon: str | None = None, flags: int = 0):
+def create_window (w: int, h: int, caption: str, icon: str | None = None, flags: int = 0, titlebar_flags: int = 0):
     _win_size = (w, h)
     app_state.flags = WINDOW_FLAGS | flags
+    app_state.titlebar_flags = titlebar_flags
     win = pygame.display.set_mode((w, h), app_state.flags)
     pygame.display.set_caption(caption)
 
@@ -94,11 +96,11 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
         elif app_state.get_visible_count() == 2:
             add_widget(_minimize_btn)
     else:
-
-        add_widget(_minimize_btn)
-        if flags & pygame.RESIZABLE:
-            add_widget(_maximize_button)
-            add_widget(Border(border_width = 4, onpressed = _rezize_window ))
+        if not app_state.titlebar_flags & Flags.MINMAX_DISABLED:
+            add_widget(_minimize_btn)
+            if flags & pygame.RESIZABLE:
+                add_widget(_maximize_button)
+                add_widget(Border(border_width = 4, onpressed = _rezize_window ))
 
 
     add_widget(MoveButton(app_state.get_visible_count()*(icon_size+icon_pad)+pad, pad, h = 20, anchors = [1, 0], onpressed = _move_window))
