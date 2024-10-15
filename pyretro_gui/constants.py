@@ -21,8 +21,21 @@ class Flags:
     MINMAX_DISABLED = 1
 
 class DialogStatus:
-    CLOSE = 0
-    OK = 1
+    CLOSE   = 0
+    OK      = 1
+
+    NO      = CLOSE
+    YES     = OK
+
+class DialogFlags:
+    class DialogType:
+        INFO    = 0
+        WARNING = 1
+        ERROR   = 2
+
+    OK_CLOSE_COMBO  = 0
+    YES_NO_COMBO    = 1
+
 
 
 # not really a constant but a type

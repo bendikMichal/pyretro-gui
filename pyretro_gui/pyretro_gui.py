@@ -22,7 +22,7 @@ Icon = RetroIcon
 from .scrollbar import ScrollBar
 from .container import Container
 
-from .constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE, Flags, DialogStatus, ReferenceValue
+from .constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE, Flags, DialogStatus, DialogFlags, ReferenceValue
 from .app_core import app_state
 
 from .todo import *
