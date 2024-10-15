@@ -18,4 +18,10 @@ def __dialog (w, h, title, icon, button_flags):
 
 
 if __name__ == "__main__":
-    __dialog(240, 180, "Test dialog", "icon", 0)
+    print(sys.argv)
+    w = int(sys.argv[1])
+    h = int(sys.argv[2])
+    title = sys.argv[3]
+    icon = sys.argv[4]
+    flags = int(sys.argv[5])
+    __dialog(w, h, title, icon, flags)

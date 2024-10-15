@@ -16,6 +16,7 @@ class app_state:
     lt = time.time()
     origin_press = None
     resizing = False
+    unclickable = False
     visible_buttons_count = 3
 
     windowized_size = (0, 0)

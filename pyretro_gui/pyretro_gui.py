@@ -133,6 +133,12 @@ def window_update ():
     
     if not mouse_pos: mouse_pos = pygame.mouse.get_pos()
     mouse_btns = pygame.mouse.get_pressed()
+    if app_state.unclickable:
+        if mouse_btns[0]:
+            # play sound or sth
+            pass
+        mouse_btns = (0, 0, 0)
+
     if (mouse_btns[0] and not _prev_pressed): app_state.origin_press = mouse_pos
     _prev_pressed = mouse_btns[0]
 
