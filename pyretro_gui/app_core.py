@@ -1,4 +1,5 @@
 
+from os import stat
 import pygame
 import sys
 
@@ -6,6 +7,7 @@ if sys.platform != "win32":
     from .retro_screen import x_can_minimize
 
 from .constants import UI_FPS, Flags
+
 
 import time
 class app_state:
@@ -24,10 +26,27 @@ class app_state:
 
     flags = 0
     titlebar_flags = 0
+    
+    timers = {
+            "warn": 0.0
+            }
+    timer_lens = {
+            "warn": 30 * (UI_FPS / 60)
+            }
 
     Window: pygame.Surface = None
 
     moving = False
+
+    @staticmethod
+    def update_timers ():
+        for k in app_state.timers:
+            if (app_state.timers[k] > 0):
+                app_state.timers[k] -= 1 * app_state.get_dt()
+
+    @staticmethod
+    def restart_timer (timer_name: str):
+        app_state.timers[timer_name] = app_state.timer_lens[timer_name]
 
     @staticmethod
     def set_visible_count ():

@@ -7,6 +7,7 @@ from typing_extensions import deprecated
 import pygame
 
 pygame.init()
+pygame.mixer.init(channels = 1)
 from pygame.version import vernum
 
 from .border import Border
@@ -21,12 +22,13 @@ Icon = RetroIcon
 from .scrollbar import ScrollBar
 from .container import Container
 
-from .constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE, Flags, DialogStatus
+from .constants import SCR_BORDER, SCREEN_PAD, SCREEN_X_POS, SCREEN_Y_POS, Colors, UI_FPS, WIN_BORDER_SIZE, Flags, DialogStatus, ReferenceValue
 from .app_core import app_state
 
 from .todo import *
 
 from .window_handler import _move_window, _maximize_app, _minimize_app, _rezize_window, WINDOW_FLAGS
+from .path_handler import base_path
 
 from .dialog import open_dialog
 
@@ -130,14 +132,18 @@ def window_update ():
 
 
     app_state.update_dt()
+    app_state.update_timers()
     
     if not mouse_pos: mouse_pos = pygame.mouse.get_pos()
     mouse_btns = pygame.mouse.get_pressed()
     if app_state.unclickable:
         if mouse_btns[0]:
-            # play sound or sth
-            pass
+            if app_state.timers["warn"] <= 0:
+                pygame.mixer.Sound(base_path + "/sounds/warn.wav").play()
+                app_state.restart_timer("warn")
+
         mouse_btns = (0, 0, 0)
+        mouse_pos = (0, 0)
 
     if (mouse_btns[0] and not _prev_pressed): app_state.origin_press = mouse_pos
     _prev_pressed = mouse_btns[0]
@@ -157,6 +163,11 @@ def window_render ():
     # draw widgets
     for w in app_state.widgets:
         w.render(window, window.get_size())
+
+    if app_state.unclickable:
+        s = pygame.Surface(window.get_size())
+        s.fill([125] * 3)
+        window.blit(s, (0, 0), special_flags = pygame.BLEND_ADD)
 
     # draw window border
     pygame.draw.rect(window, Colors.TEXT, (-1, -1, win_size[0] + 1, win_size[1] + 1), WIN_BORDER_SIZE)

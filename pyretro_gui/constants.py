@@ -23,3 +23,12 @@ class Flags:
 class DialogStatus:
     CLOSE = 0
     OK = 1
+
+
+# not really a constant but a type
+class ReferenceValue:
+    def __init__ (self, value = None):
+        self.value = value
+
+    def __repr__(self) -> str:
+        return str(self.value)
