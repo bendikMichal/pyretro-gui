@@ -17,6 +17,8 @@ def __dialog (w, h, title, icon, button_flags):
 
     while app_state.running:
         window_update()
+        b2.x = 16 + b1.w
+
         window_render()
 
 

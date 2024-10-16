@@ -18,7 +18,6 @@ class RetroButton:
         self.y = y
         self.w = w
         self.h = h
-        self.rect = pygame.Rect(x, y, w, h)
         self.colors = colors
 
         self.text = text
