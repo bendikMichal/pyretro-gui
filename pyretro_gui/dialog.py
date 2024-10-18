@@ -23,7 +23,7 @@ def _threaded_dialog (w, h, title, icon, button_flags, ref):
         app_state.unclickable = True
 
     print("Opening dialog with:", w, h, title, button_flags)
-    res = subprocess.call(f"python {base_path}/../_dialog_window.py {w} {h} \"{title}\" \"{icon}\" {button_flags}".split())
+    res = subprocess.call(f"python$|{base_path}/../_dialog_window.py$|{w}$|{h}$|\"{title}\"$|\"{icon}\"$|{button_flags}".split("$|"))
 
     with lock_app_state:
         app_state.unclickable = False
