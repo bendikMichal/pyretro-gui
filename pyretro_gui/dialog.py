@@ -26,7 +26,7 @@ def _threaded_dialog (w, h, title, icon, button_flags, ref, buttons):
     print("Opening dialog with:", w, h, title, button_flags, buttons)
     command = f"python$|{base_path}/../_dialog_window.py$|{w}$|{h}$|\"{title}\"$|\"{icon}\"$|{button_flags}"
     for btn in buttons:
-        command += "$|{btn[0]}$|{btn[1]}"
+        command += f"$|{btn[0]}$|{btn[1]}"
     res = subprocess.call(command.split("$|"))
 
     with lock_app_state:

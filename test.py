@@ -54,7 +54,9 @@ while app_state.running:
     if not app_state.running:
         app_state.running = True
 
-        messagebox_show(300, 120, "Do you really want to exit?", "", button_flags=DialogFlags.YES_NO_COMBO, out = exit_dialog_code)
+        # messagebox_show(300, 120, "Do you really want to exit?", "", button_flags=DialogFlags.YES_NO_COMBO, out = exit_dialog_code)
+        messagebox_show(300, 120, "Do you really want to exit?", "", button_flags=DialogFlags.CUSTOM, out=exit_dialog_code,
+                        buttons=[("Yes", DialogStatus.YES), ("No", DialogStatus.NO), ("Hatsune Miku", 67)])
 
 
 
