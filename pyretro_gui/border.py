@@ -8,6 +8,7 @@ class Border:
     def __init__ (self, border_width = 2, onpressed = lambda _: None, z_index = -99):
         # width as in border width
         self.border_width = border_width
+        app_state.current_border_width = border_width
         self.onpressed = onpressed
         self.z_index = z_index
 
@@ -38,6 +39,7 @@ class Border:
 
 
     def update (self, mouse_pos, mouse_btns, window_size):
+        app_state.current_border_width = self.border_width
         self.resize(window_size)
 
         if not self.pressed: self.resize_vector = [0] * 2

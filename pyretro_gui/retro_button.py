@@ -63,6 +63,11 @@ class RetroButton:
     def enabled(self):
         self._disabled = False
 
+    def recalc_dimensions (self):
+        if self.text:
+            text_surf = font.render(self.text, False, Colors.TEXT)
+            self.w = text_surf.get_width() + 8
+
     def update (self, mouse_pos: list[int], mouse_btns: list[bool], win_size):
         r = self.get_rect(win_size)
 

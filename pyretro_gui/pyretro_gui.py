@@ -63,20 +63,24 @@ ui_tick = lambda: __internal_clock.tick(UI_FPS)
 def close_app (_):
     app_state.running = False
 
+def quit_app (_):
+    pygame.quit()
+    os._exit(0)
 
-def create_window (w: int, h: int, caption: str, icon: str | None = None, flags: int = 0, titlebar_flags: int = 0):
+
+def create_window (w: int, h: int, caption: str, icon: str | None = None, flags: int = 0, titlebar_flags: int = 0, always_on_top: bool = False):
     _win_size = (w, h)
     app_state.flags = WINDOW_FLAGS | flags
     app_state.titlebar_flags = titlebar_flags
-    win = pygame.display.set_mode((w, h), app_state.flags)
-    pygame.display.set_caption(caption)
+
+    _Window = pygame.Window(caption, size=_win_size, always_on_top=always_on_top, borderless=WINDOW_FLAGS & pygame.NOFRAME)
+    win = _Window.get_surface();
 
     ico = None
     if icon: 
         ico = pygame.image.load(icon).convert_alpha()
-        pygame.display.set_icon(ico)
+        _Window.set_icon(ico)
 
-    # screen = pygame.Surface((w - SCREEN_X_POS * 2 - SCR_BORDER, h - SCREEN_Y_POS - SCREEN_PAD - SCR_BORDER))
     
     # generating ui
     icon_size = RetroButton.ICON_SIZE
@@ -89,11 +93,14 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
     add_widget(Button(pad, pad, w = icon_size, h = icon_size, colors = [Colors.CLOSE, Colors.CLOSE_HOVER], anchors = [1, 0], onclick = close_app, z_index = 99, name = "close"))
     _minimize_btn = Button((app_state.get_visible_count() - 1) * (icon_size + icon_pad) + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _minimize_app, z_index = 99, name = "minimize")
 
-    _maximize_button = Button(icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _maximize_app, z_index = 99, name = "maximize")
+    _maximize_btn = Button(icon_size + icon_pad + pad, pad, w = icon_size, h = icon_size, anchors = [1, 0], onclick = _maximize_app, z_index = 99, name = "maximize")
+    app_state._minimize_btn = _minimize_btn
+    app_state._maximize_btn = _maximize_btn 
+
     if sys.platform != "win32":
         if app_state.get_visible_count() == 3:
             add_widget(_minimize_btn)
-            add_widget(_maximize_button)
+            add_widget(_maximize_btn)
             add_widget(Border(border_width = 4, onpressed = _rezize_window ))
         elif app_state.get_visible_count() == 2:
             add_widget(_minimize_btn)
@@ -101,7 +108,7 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
         if not app_state.titlebar_flags & Flags.MINMAX_DISABLED:
             add_widget(_minimize_btn)
             if flags & pygame.RESIZABLE:
-                add_widget(_maximize_button)
+                add_widget(_maximize_btn)
                 add_widget(Border(border_width = 4, onpressed = _rezize_window ))
 
 
@@ -109,6 +116,7 @@ def create_window (w: int, h: int, caption: str, icon: str | None = None, flags:
     add_widget(Icon(pad, pad, icon = ico, z_index = 99))
 
 
+    app_state._Window = _Window
     app_state.Window = win
 
 
@@ -157,22 +165,22 @@ def window_render ():
     window = app_state.Window
 
     # clear window
-    win_size = window.get_size()
+    win_size = app_state._Window.size
     window.fill(Colors.BG) 
 
     # draw widgets
     for w in app_state.widgets:
-        w.render(window, window.get_size())
+        w.render(window, win_size)
 
     if app_state.unclickable:
-        s = pygame.Surface(window.get_size())
+        s = pygame.Surface(win_size)
         s.fill([125] * 3)
         window.blit(s, (0, 0), special_flags = pygame.BLEND_ADD)
 
     # draw window border
     pygame.draw.rect(window, Colors.TEXT, (-1, -1, win_size[0] + 1, win_size[1] + 1), WIN_BORDER_SIZE)
     
-    pygame.display.update()
+    app_state._Window.flip()
 
 
 

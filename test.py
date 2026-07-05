@@ -2,8 +2,8 @@
 # do NOT learn from this file
 # import pyretro_gui as rg
 __package__ = "pyretro_gui"
-from pyretro_gui.dialog import open_dialog
-from .pyretro_gui import app_state, close_app, MenuBar, MenuItem, DropDown, Container, create_window, window_update, window_render, ReferenceValue
+from pyretro_gui.dialog import open_dialog, messagebox_show
+from .pyretro_gui import app_state, close_app, quit_app, MenuBar, MenuItem, DropDown, Container, create_window, window_update, window_render, ReferenceValue, DialogFlags, DialogStatus
 
 from .constants import SCREEN_X_POS, SCREEN_Y_POS
 
@@ -40,18 +40,21 @@ app_state.widgets.append(MenuBar([
     ]))
 
 
-popped = False
 exit_dialog_code = ReferenceValue()
 
 while app_state.running:
     window_update()
     window_render()
+    
+    if exit_dialog_code.value is not None:
+        if exit_dialog_code.value == DialogStatus.YES:
+            quit_app(None)
+        exit_dialog_code.value = None
 
-    if not app_state.running and not popped:
-        popped = True
+    if not app_state.running:
         app_state.running = True
 
-        open_dialog(200, 120, "Test dialog", "", out = exit_dialog_code)
+        messagebox_show(300, 120, "Do you really want to exit?", "", button_flags=DialogFlags.YES_NO_COMBO, out = exit_dialog_code)
 
 
 

@@ -74,6 +74,6 @@ class MoveButton(RetroButton):
         pygame.draw.rect(win, self.border_color, r, 1)
         pygame.draw.line(win, self.border_color, (r.x, r.y + r.h), (r.x + r.w - 1, r.y + r.h), 1)
 
-        text_surf = font.render(pygame.display.get_caption()[0], False, self.border_color)
+        text_surf = font.render(app_state._Window.title, False, self.border_color)
         win.blit(text_surf, [r.x + 4, r.y + 3])
 

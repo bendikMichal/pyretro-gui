@@ -24,6 +24,7 @@ __info = pygame.display.Info()
 _win_size = (0, 0)
 
 def move_check ():
+    # this can stay as is even when we are using pygame.Window, tho if there is someone who is bored I'm open to rewrites
     if not pygame.display.get_window_position or not pygame.display.set_window_position:
         print("Unable to get/set window position, update pygame-ce version! Minimum pygame-ce version is >= 2.5.x")
         os._exit(1)
@@ -37,44 +38,52 @@ def resize_screen ():
     app_state.screen = new_screen
 
 def _maximize_app (btn):
-    app_state.windowized_size = pygame.display.get_window_size()
-    app_state.windowized_pos = pygame.display.get_window_position()
-    if sys.platform == "win32":
-        move_check()
-        pygame.display.set_mode((1, 1), pygame.RESIZABLE)
-        hwnd = pygame.display.get_wm_info()["window"]
 
-        import ctypes
-        ctypes.windll.user32.ShowWindow(hwnd, SW_MAXIMIZE)
-        size = list(pygame.display.get_window_size()).copy()
+    app_state.windowized_size = app_state._Window.size
+    app_state.windowized_pos = app_state._Window.position
+    app_state.maximized = True
+    app_state._Window.set_fullscreen(desktop=True)
+    # not needed as of the new pygame.Window
+    # if sys.platform == "win32":
+    #     move_check()
+    #     pygame.display.set_mode((1, 1), pygame.RESIZABLE)
+    #     hwnd = pygame.display.get_wm_info()["window"]
 
-        titlebar_h = ctypes.windll.user32.GetSystemMetrics(4)
-        size[1] += titlebar_h
+    #     import ctypes
+    #     ctypes.windll.user32.ShowWindow(hwnd, SW_MAXIMIZE)
+    #     size = list(pygame.display.get_window_size()).copy()
 
-        pygame.display.set_mode((1, 1), app_state.flags)
-        pygame.display.set_mode(size, app_state.flags)
+    #     titlebar_h = ctypes.windll.user32.GetSystemMetrics(4)
+    #     size[1] += titlebar_h
 
-        x, y = pygame.display.get_window_position()
-        pygame.display.set_window_position((x, y - titlebar_h))
+    #     pygame.display.set_mode((1, 1), app_state.flags)
+    #     pygame.display.set_mode(size, app_state.flags)
 
-    else:
-        x_maximize()
+    #     x, y = pygame.display.get_window_position()
+    #     pygame.display.set_window_position((x, y - titlebar_h))
+
+    # else:
+    #     x_maximize()
 
     btn.name = "windowize"
     btn.load_img()
     btn.onclick = _windowize_app
 
 def _minimize_app (btn):
-    pygame.display.iconify()
+    app_state._Window.minimize()
+    # pygame.display.iconify()
 
 def _move_window (btn):
     move_check()
+
+    if app_state.maximized:
+        _windowize_app(app_state._maximize_btn)
 
     mx, my = get_mouse_pos()
     x = mx - btn.origin_press[0]
     y = my - btn.origin_press[1]
 
-    pygame.display.set_window_position((x, y))
+    app_state._Window.position = (x, y)
 
 def _rezize_window (border):
     move_check()
@@ -83,8 +92,8 @@ def _rezize_window (border):
     rv = border.resize_vector
     op = border.origin_press
     
-    new_size = list(pygame.display.get_window_size())
-    new_pos = list(pygame.display.get_window_position())
+    new_size = list(app_state._Window.size)
+    new_pos = list(app_state._Window.position)
 
     orig_size = new_size.copy()
     orig_pos = new_pos.copy()
@@ -93,44 +102,63 @@ def _rezize_window (border):
 
     # x
     if rv[0] > 0:
-        new_size[0] = mx - orig_pos[0]
+        if abs(orig_pos[0] - mx) > app_state.current_border_width:
+            new_size[0] = mx - orig_pos[0]
 
     if rv[0] < 0:
-        s = orig_pos[0] - mx
-        new_size[0] += s
-        new_pos[0] = mx
+        if abs(orig_pos[0] - mx) > app_state.current_border_width:
+            s = orig_pos[0] - mx
+            new_size[0] += s
+            new_pos[0] = mx
 
     # y
     if rv[1] > 0:
-        new_size[1] = my - orig_pos[1]
+        if abs(orig_pos[1] - my) > app_state.current_border_width:
+            new_size[1] = my - orig_pos[1]
 
     if rv[1] < 0:
-        # s = orig_pos[1] - my
-        ns = (orig_pos[1] + orig_size[1]) - my
-        # new_size[1] = s + orig_size[1]
-        new_size[1] = ns
-        new_pos[1] = my - op[1]
+        # a bug this lines here fixed plagued me for a nearly 2 years
+        if abs(orig_pos[1] - my) > app_state.current_border_width:
+            ns = (orig_pos[1] + orig_size[1]) - my
+            new_size[1] = ns
+            new_pos[1] = my - op[1]
+
+            # fixed window getting smaller on resize from top
+            original_bottom = orig_pos[1]+orig_size[1]
+            new_bottom = new_pos[1]+new_size[1]
+            if (original_bottom != new_bottom):
+                new_size[1] += original_bottom - new_bottom
 
 
-    if sys.platform == "win32":
-        # this caused flickering on linux
-        pygame.display.set_mode(new_size, app_state.flags)
-    else:
-        x_resize_window(new_size)
 
-    pygame.display.set_window_position(new_pos)
+    app_state._Window.size = new_size
+    app_state._Window.position = new_pos
+    # not needed as of the new pygame.Window
+    # if sys.platform == "win32":
+    #     # this caused flickering on linux
+    #     pygame.display.set_mode(new_size, app_state.flags)
+    # else:
+    #     x_resize_window(new_size)
+    # pygame.display.set_window_position(new_pos)
 
 
 def _windowize_app (btn):
-    if sys.platform == "win32":
-        hwnd = pygame.display.get_wm_info()["window"]
+    if app_state.maximized:
+        # app_state._Window.size = app_state.windowized_size
+        # app_state._Window.position = app_state.windowized_pos
+        app_state.maximized = False
+        app_state._Window.set_windowed()
 
-        import ctypes
-        ctypes.windll.user32.ShowWindow(hwnd, SW_NORMAL)
+    # not needed as of the new pygame.Window
+    # if sys.platform == "win32":
+    #     hwnd = pygame.display.get_wm_info()["window"]
 
-    pygame.display.set_mode(app_state.windowized_size, app_state.flags)
-    if sys.platform != "win32":
-        pygame.display.set_window_position(app_state.windowized_pos)
+    #     import ctypes
+    #     ctypes.windll.user32.ShowWindow(hwnd, SW_NORMAL)
+
+    # pygame.display.set_mode(app_state.windowized_size, app_state.flags)
+    # if sys.platform != "win32":
+    #     pygame.display.set_window_position(app_state.windowized_pos)
 
     btn.name = "maximize"
     btn.load_img()

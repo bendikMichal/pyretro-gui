@@ -21,6 +21,7 @@ class Flags:
     MINMAX_DISABLED = 1
 
 class DialogStatus:
+    ERROR   = -1
     CLOSE   = 0
     OK      = 1
 
@@ -28,13 +29,16 @@ class DialogStatus:
     YES     = OK
 
 class DialogFlags:
-    class DialogType:
-        INFO    = 0
-        WARNING = 1
-        ERROR   = 2
+    # unused for now
+    # class DialogType:
+    #     INFO    = 0
+    #     WARNING = 1
+    #     ERROR   = 2
+    #     CUSTOM  = 4
 
     OK_CLOSE_COMBO  = 0
     YES_NO_COMBO    = 1
+    CUSTOM          = 4
 
 
 

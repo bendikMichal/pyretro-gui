@@ -8,7 +8,7 @@ def exit_dialog (status):
 
 
 def __dialog (w, h, title, icon, button_flags):
-    create_window(w, h, title, "", titlebar_flags = Flags.MINMAX_DISABLED)
+    create_window(w, h, title, "", titlebar_flags = Flags.MINMAX_DISABLED, always_on_top = True)
 
     close_text = "No" if button_flags & DialogFlags.YES_NO_COMBO else "Close"
     ok_text = "Yes" if button_flags & DialogFlags.YES_NO_COMBO else "Ok"
@@ -21,6 +21,23 @@ def __dialog (w, h, title, icon, button_flags):
 
         window_render()
 
+def __customizable_dialog (w, h, title, icon, buttons):
+    create_window(w, h, title, "", titlebar_flags = Flags.MINMAX_DISABLED, always_on_top = True)
+
+    x_start_origin = 8
+
+    x_start = x_start_origin
+    for button_info in reversed(buttons):
+        button_name, button_status = button_info
+        b = Button(x_start, 8, h = 20, anchors = [1, 1], text = button_name, onclick = lambda _: exit_dialog(button_status))
+        add_widget(b)
+        b.recalc_dimensions()
+        x_start += 16 + b.w
+
+    while app_state.running:
+        window_update()
+        window_render()
+
 
 if __name__ == "__main__":
     print(sys.argv)
@@ -29,4 +46,16 @@ if __name__ == "__main__":
     title = sys.argv[3].replace("\"", "")
     icon = sys.argv[4].replace("\"", "")
     flags = int(sys.argv[5])
-    __dialog(w, h, title, icon, flags)
+
+    if not (flags & DialogFlags.CUSTOM):
+        __dialog(w, h, title, icon, flags)
+
+    if len(sys.argv) > 6 and len(sys.argv)%2 == 0:
+        buttons = []
+        for i in range(6, len(sys.argv), 2):
+            buttons.append((sys.argv[i], int(sys.argv[i+1])))
+        __customizable_dialog(w, h, title, icon, buttons)
+
+    else:
+        print("Incorrect amount of arguments!")
+        sys.exit(DialogStatus.ERROR)

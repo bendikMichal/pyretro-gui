@@ -5,15 +5,17 @@
 2. [Creating a window](#Creating-a-window)
 3. [Setting UI refresh rate](#Setting-UI-refresh-rate)
 4. [Main app loop](#Main-app-loop)
-5. [Creating Menu Bar](#Creating-Menu-Bar)
-6. [Menu Item](#Menu-Item)
-7. [DropDown](#DropDown)
-8. [Scrollbar](#Scrollbar)
-9. [Container](#Container)
-10. [Buttons](#RetroButton)
-11. [About widgets](#Widgets)
-12. [Adding widgets](#Adding-Widgets)
-13. [Screen](#Screen)
+5. [Quitting app](#Quitting-app)
+6. [Creating Menu Bar](#Creating-Menu-Bar)
+7. [Menu Item](#Menu-Item)
+8. [DropDown](#DropDown)
+9. [Scrollbar](#Scrollbar)
+10. [Container](#Container)
+11. [Buttons](#RetroButton)
+12. [About widgets](#Widgets)
+13. [Adding widgets](#Adding-Widgets)
+14. [Screen](#Screen)
+15. [Dialog (MessageBox)](#Dialog)
 
 
 ### Importing
@@ -31,7 +33,11 @@ rg.create_window(640, 480, "Test App title", "test_icon.png")
 rg.create_window(640, 480, "Test App title", "test_icon.png", flags = pygame.RESIZABLE)
 ```
 > [!NOTE]
-> Resizable window is highly experimental and might cause issues such as crashes
+> Resizable window is highly experimental and might cause issues such as crashes, also rest of the flags are ignored except this one as of writing
+- to make window always on top you can use `always_on_top=True` in the `rg.create_window`
+> [!NOTE]
+> Always on top setting might not work on all platforms
+
 
 ### Setting UI refresh rate 
 > [!NOTE]
@@ -45,6 +51,29 @@ rg.UI_FPS = 30
 while rg.app_state.running:
     rg.window_update()
     rg.window_render()
+```
+
+### Quitting app
+There are two functions that are used to quit. `close_app` and `quit_app`.
+- `close_app` is a simpler and in a sense weaker, it just sets `running` to false.
+- `quit_app` is a stronger option which unconditionally closes the app.
+These two can be used in tandem with [Dialog (MessageBox)](#Dialog) to make a more complex closing mechanism such as:
+```python
+exit_dialog_code = ReferenceValue()
+
+while app_state.running:
+    window_update()
+    window_render()
+    
+    if exit_dialog_code.value is not None:
+        if exit_dialog_code.value == DialogStatus.YES:
+            quit_app(None)
+        exit_dialog_code.value = None
+
+    if not app_state.running:
+        app_state.running = True
+
+        messagebox_show(300, 120, "Do you really want to exit?", "", button_flags=DialogFlags.YES_NO_COMBO, out=exit_dialog_code)
 ```
 
 ### Creating Menu Bar
@@ -178,3 +207,22 @@ rg.add_widget(widget_instance)
 > `screen` was replaced by [Container](#Container) widget.
 
 
+### Dialog
+- Also called `MessageBox`
+#### Usage
+- can be called directly from terminal
+```bash
+# <width> <height> <title> <icon> <flags> [<Button title> <Return status>]*
+python3 _dialog_window.py 200 100 "Predefined YES/NO messagebox" "" 1
+python3 _dialog_window.py 300 100 "Custom messagebox" "" 4 Hello 1 World 2 "Miku Hatsune" 3
+```
+- or using code, the interface is:
+```python
+def open_dialog(w: int, h: int, title: str, icon: str, button_flags: int = 0, halting = False, out: ReferenceValue | None = None, buttons = []):
+    ...
+```
+- `button_flags` is an `int` of flags from `DialogFlags`
+- `buttons` is a list of tuples such as `(name: str, return_code: int)` eg. `("Accept", 1)`.
+- `out` is a `ReferenceValue`, which in parameter `value` contains an int of type `DialogStatus` or if `DialogFlags.CUSTOM` is specified then the int is either `DialogStatus.ERROR` or a custom `return_code` specified in `buttons`
+    - The intention of `out` is to provide a way to determine which button the user pressed.
+- alternatively, you can also call `messagebox_show` which is an alias for `open_dialog`

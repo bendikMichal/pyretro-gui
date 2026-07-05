@@ -19,7 +19,9 @@ class app_state:
     origin_press = None
     resizing = False
     unclickable = False
+    maximized = False
     visible_buttons_count = 3
+    current_border_width = 0
 
     windowized_size = (0, 0)
     windowized_pos = (0, 0)
@@ -34,7 +36,10 @@ class app_state:
             "warn": 30 * (UI_FPS / 60)
             }
 
+    _Window: pygame.Window = None
     Window: pygame.Surface = None
+    _minimize_btn = None
+    _maximize_btn = None
 
     moving = False
 
